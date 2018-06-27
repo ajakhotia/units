@@ -16,7 +16,8 @@ namespace units
  * 			identical to using raw scalars.So don't be naive and use this class.
  *
  * @tparam 	PhysicalUnits_	Physical units of the vector quantity.
- * @tparam 	FloatType_		Float representation of the magnitude.
+ *
+ * @tparam 	FloatType_		Float representation to be used for the underlying value.
  */
 template<typename PhysicalUnits_, typename FloatType_>
 class PhysicalQuantityVector
@@ -31,81 +32,91 @@ public:
 	/// Alias of the self type for convenience.
 	using SelfType = PhysicalQuantityVector<PhysicalUnits, FloatType>;
 
-	/// Default construction to zero or additive identity. This is needed in cases involving use of
-	/// containers and other higher level collections like matrices.
+	/// Default construction to zero or additive identity.
 	constexpr PhysicalQuantityVector() noexcept(true) : mValue(0) {};
 
 	/// Construction from an arbitrary scalar.
 	explicit constexpr PhysicalQuantityVector(const FloatType input) noexcept(true): mValue(input) {};
 
-	/// Default copy constructor. Its is important to use the class name instead of the SelfType alias
-	/// as the compiler will fail to pick it as the copy constructor. NOTE: The copy constructor is
-	/// not declared explicit as it breaks the working of copy assignment.
+	/// Default copy constructor. NOTE: Quite can't figure out why making this explicit doesn't work.
 	constexpr PhysicalQuantityVector(const PhysicalQuantityVector& rhs) noexcept(true) = default;
 
-	/// Default move constructor. Its is important to use the class name instead of the SelfType alias
-	/// as the compiler will fail to pick it as the move constructor.
+	/// Default move constructor.
 	constexpr PhysicalQuantityVector(PhysicalQuantityVector&& rhs) noexcept(true) = default;
 
-
-	/// Constructor to inter-convert physical quantity vector of of same dimensions and float types but different
-	/// units scale.
+	/// Constructor to initialize self from another compatible physical quantity vector.
 	template<typename RhsPhysicalUnits>
-	constexpr PhysicalQuantityVector(const PhysicalQuantityVector<RhsPhysicalUnits, FloatType> rhs) noexcept(true):
-			mValue(rhs.mValue * PhysicalUnitsConversionHelper<PhysicalUnits, RhsPhysicalUnits, FloatType>::kFloatRatio)
+	explicit constexpr PhysicalQuantityVector(
+			const PhysicalQuantityVector<RhsPhysicalUnits, FloatType> rhs) noexcept(true):
+			mValue(rhs.scalar() *
+				   PhysicalUnitsConversionHelper<PhysicalUnits, RhsPhysicalUnits, FloatType>::kFloatRatio)
 	{
 	}
 
 	/// Defaulted destructor.
 	~PhysicalQuantityVector() = default;
 
-	/// Default copy-assignment operator. Technically is not needed as the copy constructor is defaulted and
-	/// is not explicit.
+	/// Default copy-assignment operator.
 	constexpr SelfType& operator=(const SelfType&) noexcept(true) = default;
 
-	/// Default move-assignment. Technically is not needed as the move constructor is defaulted and
-	/// is not explicit.
+	/// Default move-assignment.
 	constexpr SelfType& operator=(SelfType&&) noexcept(true) = default;
 
-	/// Homogeneous self-addition operator.
-	SelfType& operator+=(const SelfType& rhs) noexcept(true)
+	/// Addition assignment.
+	constexpr SelfType& operator+=(const SelfType& rhs) noexcept(true)
 	{
 		mValue += rhs.mValue;
 		return *this;
 	}
 
-	/// Heterogeneous self-addition operator.
+	/// Heterogeneous addition assignment.
 	template<typename RhsPhysicalUnits>
-	SelfType& operator+=(const PhysicalQuantityVector<RhsPhysicalUnits, FloatType> rhs) noexcept(true)
+	constexpr SelfType& operator+=(const PhysicalQuantityVector<RhsPhysicalUnits, FloatType> rhs) noexcept(true)
 	{
 		*this += SelfType(rhs);
 		return *this;
 	}
 
-	/// Homogeneous self-subtraction operator.
-	SelfType& operator-=(const SelfType& rhs) noexcept(true)
+	/// Subtraction assignment.
+	constexpr SelfType& operator-=(const SelfType& rhs) noexcept(true)
 	{
 		mValue -= rhs.mValue;
 		return *this;
 	}
 
-	/// Heterogeneous self-subtraction operator.
+	/// Heterogeneous subtraction assignment.
 	template<typename RhsPhysicalUnits>
-	SelfType& operator-=(const PhysicalQuantityVector<RhsPhysicalUnits, FloatType> rhs) noexcept(true)
+	constexpr SelfType& operator-=(const PhysicalQuantityVector<RhsPhysicalUnits, FloatType> rhs) noexcept(true)
 	{
 		*this -= SelfType(rhs);
 		return *this;
 	}
 
+	/// Scalar multiplication assignment.
+	template<typename RhsFloatType>
+	constexpr SelfType& operator*=(const RhsFloatType rhsFloat) noexcept(true)
+	{
+		mValue *= static_cast<FloatType>(rhsFloat);
+		return *this;
+	}
+
+	/// Scalar division assignment.
+	template<typename  RhsFloatType>
+	constexpr SelfType& operator/=(const RhsFloatType rhs) noexcept(true)
+	{
+		mValue /= rhs;
+		return *this;
+	}
+
 	/// Pre-increment operator.
-	SelfType& operator++(int) noexcept(true)
+	constexpr SelfType& operator++() noexcept(true)
 	{
 		++mValue;
 		return  *this;
 	}
 
 	/// Post-increment operator.
-	SelfType operator++() noexcept(true)
+	constexpr SelfType operator++(int) noexcept(true)
 	{
 		SelfType cache = *this;
 		++mValue;
@@ -114,14 +125,14 @@ public:
 	}
 
 	/// Pre-decrement operator.
-	SelfType& operator--(int) noexcept(true)
+	constexpr SelfType& operator--() noexcept(true)
 	{
 		--mValue;
 		return  *this;
 	}
 
 	/// Post-decrement operator.
-	SelfType operator--() noexcept(true)
+	constexpr SelfType operator--(int) noexcept(true)
 	{
 		SelfType cache = *this;
 		--mValue;
@@ -129,22 +140,7 @@ public:
 		return cache;
 	}
 
-	/// Self scalar multiplication operator.
-	template<typename RhsFloatType>
-	SelfType& operator*=(const RhsFloatType rhsFloat) noexcept(true)
-	{
-		mValue *= static_cast<FloatType>(rhsFloat);
-		return *this;
-	}
-
-	/// Self scalar division operator.
-	template<typename  RhsFloatType>
-	SelfType& operator/(const RhsFloatType rhs) noexcept(true)
-	{
-		mValue /= rhs;
-		return *this;
-	}
-
+	/// Cast the the float representation to the provided floating type.
 	template<typename ReturnFloatType>
 	constexpr PhysicalQuantityVector<PhysicalUnits, ReturnFloatType> cast() const noexcept(true)
 	{
@@ -158,25 +154,6 @@ public:
 	}
 
 private:
-	/// Befriend all possible instances of the @class PhysicalQuantityVector so that the member value
-	//  is available across all instances.
-	template<typename OtherPhysicalUnits, typename OtherFloatType> friend class PhysicalQuantityVector;
-
-	/// Befriend operator to add physical quantities of same physical units but possibly different float
-	/// representation.
-	template<typename LhsFloatType, typename RhsFloatType>
-	friend PhysicalQuantityVector<PhysicalUnits, LhsFloatType> operator+(
-			const PhysicalQuantityVector<PhysicalUnits, LhsFloatType> lhs,
-			const PhysicalQuantityVector<PhysicalUnits, RhsFloatType> rhs) noexcept (true);
-
-	/// Befriend operator to subtract physical quantities of same physical units but possibly different float
-	/// representation.
-	template<typename PhysicalUnitsType, typename LhsFloatType, typename RhsFloatType>
-	friend PhysicalQuantityVector<PhysicalUnitsType, LhsFloatType> operator-(
-			const PhysicalQuantityVector<PhysicalUnitsType, LhsFloatType> lhs,
-			const PhysicalQuantityVector<PhysicalUnitsType, RhsFloatType> rhs) noexcept (true);
-
-
 	FloatType mValue;
 };
 

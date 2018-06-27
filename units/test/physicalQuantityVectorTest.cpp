@@ -56,7 +56,7 @@ TEST(PhysicalQuantityVector, ConvertConstruction)
 	const Metres m1(5.0);
 	const Inches i1(m1);
 
-	EXPECT_DOUBLE_EQ(196.850393700787, i1.scalar());
+	EXPECT_EQ(5.0 / 0.0254, i1.scalar());
 }
 
 TEST(PhysicalQuantityVector, CopyAssignment)
@@ -77,7 +77,7 @@ TEST(PhysicalQuantityVector, MoveAssignment)
 	EXPECT_EQ(5.0, m2.scalar());
 }
 
-TEST(PhysicalQuantityVector, HomogenousSelfAddition)
+TEST(PhysicalQuantityVector, AdditionAssignment)
 {
 	const Metres m1(5.0);
 	Metres m2(12.0);
@@ -87,7 +87,7 @@ TEST(PhysicalQuantityVector, HomogenousSelfAddition)
 	EXPECT_EQ(17.0, m2.scalar());
 }
 
-TEST(PhysicalQuantityVector, HeterogenousSelfAddition)
+TEST(PhysicalQuantityVector, HeterogenousAdditionAssignment)
 {
 	Metres m1(5.0);
 	const Inches i1(30.0);
@@ -98,7 +98,7 @@ TEST(PhysicalQuantityVector, HeterogenousSelfAddition)
 	EXPECT_DOUBLE_EQ(5.762, m1.scalar());
 }
 
-TEST(PhysicalQuantityVector, HomogenousSelfSubtraction)
+TEST(PhysicalQuantityVector, SubstrationAssignment)
 {
 	const Metres m1(5.0);
 	Metres m2(12.0);
@@ -108,7 +108,7 @@ TEST(PhysicalQuantityVector, HomogenousSelfSubtraction)
 	EXPECT_EQ(7.0, m2.scalar());
 }
 
-TEST(PhysicalQuantityVector, HeterogenousSelfSubtraction)
+TEST(PhysicalQuantityVector, HeterogenousSubstractionAssignment)
 {
 	Metres m1(5.0);
 	const Inches i1(30.0);
@@ -117,6 +117,63 @@ TEST(PhysicalQuantityVector, HeterogenousSelfSubtraction)
 	m1 -= i1;
 
 	EXPECT_DOUBLE_EQ(4.238, m1.scalar());
+}
+
+TEST(PhysicalQuantityVector, ScalarMultiplicationAssignment)
+{
+	Metres m1(5.0);
+	m1 *= 4.0;
+	EXPECT_EQ(20.0, m1.scalar());
+}
+
+TEST(PhysicalQuantityVector, ScalarDivisionOperator)
+{
+	Metres m1(5.0);
+	m1 /= 4.0;
+	EXPECT_EQ(1.25, m1.scalar());
+}
+
+TEST(PhysicalQunatityVector, PreIncrementOperator)
+{
+	Metres m1(3.0);
+	EXPECT_EQ(4.0, (++m1).scalar());
+}
+
+TEST(PhysicalQunatityVector, PostIncrementOperator)
+{
+	Metres m1(3.0);
+	EXPECT_EQ(3.0, (m1++).scalar());
+	EXPECT_EQ(4.0, m1.scalar());
+}
+
+TEST(PhysicalQunatityVector, PreDecrementOperator)
+{
+	Metres m1(3.0);
+	EXPECT_EQ(2.0, (--m1).scalar());
+}
+
+
+TEST(PhysicalQunatityVector, PostDecrementOperator)
+{
+	Metres m1(3.0);
+	EXPECT_EQ(3.0, (m1--).scalar());
+	EXPECT_EQ(2.0, m1.scalar());
+}
+
+TEST(PhysicalQunatityVector, Cast)
+{
+	const Metres m1(5.0);
+	auto m2 = m1.cast<float>();
+
+	EXPECT_EQ(5.f, m2.scalar());
+	static_assert(std::is_same<decltype(m2)::FloatType, float>::value,
+				  "Float representation of the returning type of cast() is incorrectly assigned");
+}
+
+TEST(PhysicalQuantityVector, Scalar)
+{
+	const Metres m1(3.0);
+	EXPECT_EQ(3.0, m1.scalar());
 }
 
 } // End of namespace units.
