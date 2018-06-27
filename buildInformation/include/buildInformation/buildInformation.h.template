@@ -1,0 +1,138 @@
+/*  Copyright 2016. All rights reserved by the author.
+ *  Author: Anurag Jakhotia <anuragjakhotia@gmail.com>
+ */
+#ifndef BUILD_INFORMATION_H_FA2B7EAC_FB9D_11E6_8FF5_9B6ADD507FB4
+#define BUILD_INFORMATION_H_FA2B7EAC_FB9D_11E6_8FF5_9B6ADD507FB4
+
+#include <string>
+#include <ostream>
+#include <stdexcept>
+
+namespace cppYard
+{
+namespace buildInformation
+{
+/**
+ * @breif	Provides enumerations for different types of build permitted by the build system. It is important
+ * 			that the case of enumerations matches exactly with build systems's string representation of the build
+ * 			type because string replacement will be used to assign value to an instance of this enum in the
+ * 			@class BuildInformation class.
+ */
+enum class BuildType : size_t
+{
+	Debug = 0,
+	Release = 1,
+	RelWithDebInfo = 2,
+	MinSizeRel = 3
+};
+
+/**
+ * @brief	Provides build information at compile and run time. The compile time information is provided
+ * 			using constexpr methods.
+ */
+class BuildInformation
+{
+public:
+	/**
+	 * @breif	Deleted constructor to prevent instantiation of this class.
+	 */
+	constexpr BuildInformation() = delete;
+
+	/**
+	 * @brief	Deleted constructor as this class is not meant to be instantiated.
+	 */
+	~BuildInformation() = delete;
+
+	/**
+	 * @brief	Gives the major version of the project at compile and run time.
+	 *
+ 	 * @return	Major version of the project.
+ 	 */
+	static constexpr size_t ProjectMajorVersion() noexcept(true)
+	{
+		return mMajorVersion;
+	}
+
+	/**
+	 * @brief	Gives the minor version of the project at compile and run time.
+	 *
+ 	 * @return	Major version of the project.
+ 	 */
+	static constexpr size_t ProjectMinorVersion() noexcept(true)
+	{
+		return mMinorVersion;
+	}
+
+	/**
+	 * @brief	Gives the major version of the project at compile and run time.
+	 *
+ 	 * @return	Major version of the project.
+ 	 */
+	static constexpr size_t ProjectPatchVersion() noexcept(true)
+	{
+		return mPatchVersion;
+	}
+
+	/**
+	 * @brief	Gives the major version of the project at compile and run time.
+	 *
+ 	 * @return	Major version of the project.
+ 	 */
+	static constexpr size_t ProjectTweakVersion() noexcept(true)
+	{
+		return mTweakVersion;
+	}
+
+	/**
+	 * @breif	Gives the full version string of the build.
+	 *
+	 * @return	Full version of the project.
+	 */
+	static constexpr const char* ProjectVersion() noexcept(true)
+	{
+		return mVersion;
+	}
+
+	/**
+	 * @brief	Gives the build type of the project at compile and run time.
+	 *
+	 * @return	Build type of the project.
+	 */
+	static constexpr BuildType ProjectBuildType() noexcept(true)
+	{
+		return mBuildType;
+	}
+
+private:
+	/** Set to major version of the software by the build system. */
+	static constexpr const size_t mMajorVersion = @PROJECT_VERSION_MAJOR@;
+
+	/** Set to major version of the software by the build system. */
+	static constexpr const size_t mMinorVersion = @PROJECT_VERSION_MINOR@;
+
+	/** Set to major version of the software by the build system. */
+	static constexpr const size_t mPatchVersion = @PROJECT_VERSION_PATCH@;
+
+	/** Set to major version of the software by the build system. */
+	static constexpr const size_t mTweakVersion = @PROJECT_VERSION_TWEAK@;
+
+	/** Set to the version string by the build system. */
+	static constexpr const char* const mVersion = "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@."
+			"@PROJECT_VERSION_PATCH@.@PROJECT_VERSION_TWEAK@";
+
+	/** Set to the build type of the project by the build system. */
+	static constexpr const BuildType mBuildType = BuildType::@CMAKE_BUILD_TYPE@;
+};
+
+/**
+ * @bried	Stream insertion operator for build type enumerations.
+ * @param	stream		Stream to insert the strings into. The stream is modified.
+ * @param	buildType	Build type
+ * @return	Stream with the build type inserted.
+ */
+std::ostream& operator<<(std::ostream& stream, const BuildType& buildType);
+
+} // End of namespace buildInformation.
+} // End of namespace cppYard.
+
+#endif // End of BUILD_INFORMATION_H_FA2B7EAC_FB9D_11E6_8FF5_9B6ADD507FB4.

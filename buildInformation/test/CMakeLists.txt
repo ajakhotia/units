@@ -1,0 +1,3 @@
+configure_file(buildInformationTest.cpp.template buildInformationTest.cpp @ONLY)
+
+add_gtest(buildInformationTest buildInformationTest.cpp buildInformation)

@@ -1,0 +1,79 @@
+/*  Copyright 2016. All rights reserved by the author.
+ *  Author: Anurag Jakhotia <anuragjakhotia@gmail.com>
+ */
+
+#include <buildInformation/buildInformation.h>
+#include <gtest/gtest.h>
+
+namespace cppYard
+{
+namespace buildInformation
+{
+
+/** Set to major version of the software by the build system. */
+constexpr const size_t testMajorVersion =
+@PROJECT_VERSION_MAJOR@;
+
+/** Set to major version of the software by the build system. */
+constexpr const size_t testMinorVersion =
+@PROJECT_VERSION_MINOR@;
+
+/** Set to major version of the software by the build system. */
+constexpr const size_t testPatchVersion =
+@PROJECT_VERSION_PATCH@;
+
+/** Set to major version of the software by the build system. */
+constexpr const size_t testTweakVersion =
+@PROJECT_VERSION_TWEAK@;
+
+/** Set to the version string by the build system. */
+constexpr const char* const testVersion = "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@."
+										  "@PROJECT_VERSION_PATCH@.@PROJECT_VERSION_TWEAK@";
+
+/** Set to the build type of the project by the build system. */
+constexpr const BuildType testBuildType = BuildType::
+@CMAKE_BUILD_TYPE@;
+
+TEST(BuildInformationTest, MajorVersionTest)
+{
+	static_assert(testMajorVersion == BuildInformation::ProjectMajorVersion(),
+				  "Mis-match in project major version");
+	EXPECT_EQ(testMajorVersion, BuildInformation::ProjectMajorVersion());
+}
+
+TEST(BuildInformationTest, MinorVersionTest)
+{
+	static_assert(testMinorVersion == BuildInformation::ProjectMinorVersion(),
+				  "Mis-match in project minor version");
+	EXPECT_EQ(testMinorVersion, BuildInformation::ProjectMinorVersion());
+}
+
+TEST(BuildInformationTest, PatchVersionTest)
+{
+	static_assert(testPatchVersion == BuildInformation::ProjectPatchVersion(),
+				  "Mis-match in project patch version");
+	EXPECT_EQ(testPatchVersion, BuildInformation::ProjectPatchVersion());
+}
+
+TEST(BuildInformationTest, TweakVersionTest)
+{
+	static_assert(testTweakVersion == BuildInformation::ProjectTweakVersion(),
+				  "Mis-match in project tweak version");
+	EXPECT_EQ(testTweakVersion, BuildInformation::ProjectTweakVersion());
+}
+
+TEST(BuildInformationTest, VersionTest)
+{
+	EXPECT_EQ(testVersion, BuildInformation::ProjectVersion());
+	std::cout << BuildInformation::ProjectVersion() << std::endl;
+}
+
+TEST(BuildInformationTest, BuildTypeTest)
+{
+	static_assert(static_cast<size_t>(testBuildType) == static_cast<size_t>(BuildInformation::ProjectBuildType()),
+				  "Mis-match in project build type");
+	EXPECT_EQ(static_cast<size_t>(testBuildType), static_cast<size_t>(BuildInformation::ProjectBuildType()));
+}
+
+} // End of namespace buildInformation.
+} // End of namespace cppYard.

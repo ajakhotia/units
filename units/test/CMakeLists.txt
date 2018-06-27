@@ -1,0 +1,3 @@
+add_gtest(physicalDimensionsTest physicalDimensionsTest.cpp units)
+add_gtest(physicalUnitsTest physicalUnitsTest.cpp units)
+add_gtest(physicalQuantityVectorTest physicalQuantityVectorTest.cpp units)
