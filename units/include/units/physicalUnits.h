@@ -12,8 +12,11 @@ namespace units
 
 /**
  * @brief	Template class to represent a physical units.
+ *
  * @tparam	PhysicalDimensions_	The physical dimensions of the unit of measurement.
- * @tparam	Scale_				The ratio which when multiplied with the unit converts it to its SI counterpart.
+ *
+ * @tparam	Scale_				The ratio which when multiplied with physical unit the unit converts it to
+ *                              its SI counterpart.
  * 								TIP: Read it as ScaleToSI.
  */
 template<typename PhysicalDimensions_, typename Scale_ = std::ratio<1,1>>
@@ -45,10 +48,16 @@ public:
 };
 
 /**
- * @brief	Statically computes a std::ratio that converts RHS physical unit to LHS' scale.
+ * @brief	Statically computes a std::ratio and the corresponding float that converts RHS physical unit
+ *          to the appropriate value in LHS' scale.
+ *
  * @tparam	LhsPhysicalUnits_	LHS / Destination physical units type.
+ *
  * @tparam	RhsPhysicalUnits_	RHS / Source physical units type.
- * @tparam	FloatType_			Floating point representation to be used for the resulting conversion ratios.
+ *
+ * @tparam	FloatType_			Floating point representation to be used for representing the
+ *                              resulting conversion ratio.
+ *
  */
 template<typename LhsPhysicalUnits_, typename RhsPhysicalUnits_, typename FloatType_>
 class PhysicalUnitsConversionHelper
@@ -71,8 +80,8 @@ public:
 	/// Alias of self-type.
 	using SelfType = PhysicalUnitsConversionHelper<LhsPhysicalUnits, RhsPhysicalUnits, FloatType>;
 
-	/// Scaling factor as a std::ration to convert RHS physical unit to LHS physical type.
-	using Result = std::ratio_multiply< typename LhsPhysicalUnits::Scale, typename RhsPhysicalUnits::Scale>;
+	/// Scaling factor as a std::ratio to convert RHS physical unit type to LHS physical units type.
+	using Result = std::ratio_divide<typename RhsPhysicalUnits::Scale, typename LhsPhysicalUnits::Scale>;
 
 	static constexpr const FloatType kFloatRatio{
 		static_cast<FloatType>(Result::num) / static_cast<FloatType>(Result::den)};

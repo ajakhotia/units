@@ -25,9 +25,6 @@ public:
 	/// Alias of the underlying physical units.
 	using PhysicalUnits = PhysicalUnits_;
 
-	/// Alias of the physical dimensions of the instantiation.
-	using PhysicalDimensions = typename PhysicalUnits::PhysicalDimensions;
-
 	/// Alias of the underlying float representation.
 	using FloatType = FloatType_;
 
@@ -116,6 +113,22 @@ public:
 		return cache;
 	}
 
+	/// Pre-decrement operator.
+	SelfType& operator--(int) noexcept(true)
+	{
+		--mValue;
+		return  *this;
+	}
+
+	/// Post-decrement operator.
+	SelfType operator--() noexcept(true)
+	{
+		SelfType cache = *this;
+		--mValue;
+
+		return cache;
+	}
+
 	/// Self scalar multiplication operator.
 	template<typename RhsFloatType>
 	SelfType& operator*=(const RhsFloatType rhsFloat) noexcept(true)
@@ -141,8 +154,6 @@ public:
 	/// Scalar value getter.
 	constexpr FloatType scalar() const noexcept(true)
 	{
-		#pragma message("Extracting scalar from units. While this is sometimes needed, it weakens the type safety of " \
-						" the units system. Please refrain for using this method.")
 		return mValue;
 	}
 

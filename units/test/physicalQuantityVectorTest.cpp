@@ -16,9 +16,6 @@ TEST(PhysicalQuantityVector, StaticChecks)
 	static_assert(std::is_same<MetresPhysicalUnit, typename Metres::PhysicalUnits>::value,
 				  "PhysicalUnits is incorrectly assigned in @class PhysicalQuantityVector.");
 
-	static_assert(std::is_same<Length, typename Metres::PhysicalDimensions>::value,
-				  "PhysicalDimensions is incorrectly assigned in @class PhysicalQuantityVector.");
-
 	static_assert(std::is_same<double, typename Metres::FloatType>::value,
 				  "FloatType is incorrectly assigned in @class PhysicalQuantityVector.");
 
@@ -59,7 +56,7 @@ TEST(PhysicalQuantityVector, ConvertConstruction)
 	const Metres m1(5.0);
 	const Inches i1(m1);
 
-	EXPECT_EQ(196.85039370, i1.scalar());
+	EXPECT_DOUBLE_EQ(196.850393700787, i1.scalar());
 }
 
 TEST(PhysicalQuantityVector, CopyAssignment)
@@ -119,7 +116,7 @@ TEST(PhysicalQuantityVector, HeterogenousSelfSubtraction)
 
 	m1 -= i1;
 
-	EXPECT_DOUBLE_EQ(4.283, m1.scalar());
+	EXPECT_DOUBLE_EQ(4.238, m1.scalar());
 }
 
 } // End of namespace units.

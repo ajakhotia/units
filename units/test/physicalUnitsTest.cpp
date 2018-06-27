@@ -31,24 +31,24 @@ TEST(PhysicalUnits, StaticChecks)
 
 TEST(PhysicalUnitsConversionHelper, StaticChecks)
 {
-	using MetresInchesConverter = PhysicalUnitsConversionHelper<MetresPhysicalUnit, InchesPhysicalUnit, double>;
+	using FeetInchesConverter = PhysicalUnitsConversionHelper<FeetPhysicalUnit, InchesPhysicalUnit, double>;
 
-	static_assert(std::is_same<MetresPhysicalUnit, typename MetresInchesConverter::LhsPhysicalUnits>::value,
+	static_assert(std::is_same<FeetPhysicalUnit , typename FeetInchesConverter::LhsPhysicalUnits>::value,
 				  "LhsPhysicalUnits is incorrectly assigned for @class PhysicalUnitsConversionHelper");
 
-	static_assert(std::is_same<InchesPhysicalUnit, typename MetresInchesConverter::RhsPhysicalUnits>::value,
+	static_assert(std::is_same<InchesPhysicalUnit, typename FeetInchesConverter::RhsPhysicalUnits>::value,
 				  "RhsPhysicalUnits is incorrectly assigned for @class PhysicalUnitsConversionHelper");
 
-	static_assert(std::is_same<double, typename MetresInchesConverter::FloatType>::value,
+	static_assert(std::is_same<double, typename FeetInchesConverter::FloatType>::value,
 				  "Float is incorrectly assigned for @class PhysicalUnitsConversionHelper");
 
-	static_assert(std::is_same<MetresInchesConverter, typename MetresInchesConverter::SelfType>::value,
+	static_assert(std::is_same<FeetInchesConverter, typename FeetInchesConverter::SelfType>::value,
 				  "SelfType is incorrectly assigned for @class PhysicalUnitsConversionHelper");
 
-	static_assert(std::is_same<std::ratio<127, 5000>, typename MetresInchesConverter::Result>::value,
+	static_assert(std::is_same<std::ratio<1, 12>, typename FeetInchesConverter::Result>::value,
 				  "Result is incorrectly computed in @class PhysicalUnitsConversionHelper");
 
-	static_assert(MetresInchesConverter::kFloatRatio == 0.0254,
+	static_assert(FeetInchesConverter::kFloatRatio == 1.0/12.0,
 				  "kFloatRatio has been incorrectly computed in @class PhysicalUnitsConversionHelper"
 
 	);
@@ -71,7 +71,7 @@ TEST(MultiplyPhysicalUnits, StaticChecks)
 
 	static_assert(std::is_same<typename MultiplyPhysicalDimensions<Length, Mass>::Result,
 						  typename Result::PhysicalDimensions>::value,
-				  "Dimension of the resulting physical unit is incorrcetly computed in @class MultiplyPhysicalUnits");
+				  "Dimension of the resulting physical unit is incorrectly computed in @class MultiplyPhysicalUnits");
 
 	static_assert(std::is_same<std::ratio<45359237, 100000000>,
 						  typename Result::Scale>::value,
