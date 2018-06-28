@@ -28,7 +28,7 @@ const auto a2 = m1 * i1;  // Has dimensions of (L^(2,0), M^(0,0), T^(0,0), I^(0,
 const auto a3 = i1 * i1;  // Has dimensions of (L^(2,0), M^(0,0), T^(0,0), I^(0,0), K^(0,0), N^(0,0), J^(0,0)) and scale (16129/25000000)
 
 //m1 + a1;                // Illeagal operation. Won't compile. Cannot add length to area.
-a2 + a3;                  // Legal operation. Both quantities have have same physical dimensions. Appropriate conversions will be done autimatically.
+a2 + a3;                  // Legal operation. Both quantities have have same physical dimensions. Appropriate conversions will be done automatically.
 a2 * i1                   // Has dimensions of (L^(3,0), M^(0,0), T^(0,0), I^(0,0), K^(0,0), N^(0,0), J^(0,0)) and scale (16129/25000000)
 
 ```
