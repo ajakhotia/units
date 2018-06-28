@@ -176,5 +176,111 @@ TEST(PhysicalQuantityVector, Scalar)
 	EXPECT_EQ(3.0, m1.scalar());
 }
 
+
+
+TEST(PhysicalQuantityVector, AdditionOperator)
+{
+    const Metres m1(3.0);
+    const Metres m2(5.0);
+
+    const Metres  m3 = m1 + m2;
+
+    EXPECT_EQ(8.0, m3.scalar());
+}
+
+TEST(PhysicalQuantityVector, HeterogenousAdditionOperator)
+{
+    const Metres m1(3.0);
+    const Inches i1(5.0);
+
+    const Metres m2 = m1 + i1;
+
+    EXPECT_EQ(3.127, m2.scalar());
+}
+
+
+TEST(PhysicalQuantityVector, SubtractionOperator)
+{
+	const Metres m1(3.0);
+	const Metres m2(5.0);
+
+	const Metres  m3 = m1 - m2;
+
+	EXPECT_EQ(-2.0, m3.scalar());
+}
+
+TEST(PhysicalQuantityVector, HeterogenousSubtractionOperator)
+{
+	const Metres m1(3.0);
+	const Inches i1(5.0);
+
+	const Metres m2 = m1 - i1;
+
+	EXPECT_EQ(2.873, m2.scalar());
+}
+
+TEST(PhysicalQuantityVector, MultiplicationOperator)
+{
+	const Metres m1(4.0);
+	const Inches i1(5.0);
+
+	const auto area1 = m1 * i1;
+
+	EXPECT_EQ(20.0, area1.scalar());
+}
+
+TEST(MultiplyPhysicalQuantityVector, StaticChecks)
+{
+	using MultiplyInchesAndPounds = MultiplyPhysicalQuantityVector<Inches, Pounds>;
+
+	static_assert(std::is_same<Inches, typename MultiplyInchesAndPounds::LhsPhysicalQuantityVector>::value,
+	              "LHS physical quantity vector is incorrectly assigned in @class "
+	              " MultiplyPhysicalQuantityVector.");
+
+	static_assert(std::is_same<Pounds, typename MultiplyInchesAndPounds::RhsPhysicalQuantityVector>::value,
+	              "RHS physical quantity vector is incorrectly assigned in @class "
+	              " MultiplyPhysicalQuantityVector.");
+
+	static_assert(std::is_same<MultiplyInchesAndPounds, typename MultiplyInchesAndPounds::SelfType>::value,
+	              "Self type is incorrectly assigned in @class MultiplyPhysicalQuantityVector.");
+
+	using ResultAreaType = typename MultiplyInchesAndPounds::Result;
+	using LengthMassPhysicalDimensions = typename MultiplyPhysicalDimensions<Length, Mass>::Result;
+
+	static_assert(std::is_same<LengthMassPhysicalDimensions,
+			                   typename ResultAreaType::PhysicalUnits::PhysicalDimensions>::value,
+	              "Resulting dimension of the product of physical quantity vectors is incorrect.");
+
+	EXPECT_EQ(0.011521246198, static_cast<double>(ResultAreaType::PhysicalUnits::Scale::num) /
+	                          static_cast<double>(ResultAreaType::PhysicalUnits::Scale::den));
+}
+
+TEST(DividePhysicalQuantityVector, StaticChecks)
+{
+	using DivideInchesAndPounds = DividePhysicalQuantityVector<Inches, Pounds>;
+
+	static_assert(std::is_same<Inches, typename DivideInchesAndPounds::LhsPhysicalQuantityVector>::value,
+	              "LHS physical quantity vector is incorrectly assigned in @class "
+	              " DividePhysicalQuantityVector.");
+
+	static_assert(std::is_same<Pounds, typename DivideInchesAndPounds::RhsPhysicalQuantityVector>::value,
+	              "RHS physical quantity vector is incorrectly assigned in @class "
+	              " DividePhysicalQuantityVector.");
+
+	static_assert(std::is_same<DivideInchesAndPounds, typename DivideInchesAndPounds::SelfType>::value,
+	              "Self type is incorrectly assigned in @class DividePhysicalQuantityVector.");
+
+	using ResultAreaType = typename DivideInchesAndPounds::Result;
+	using LengthOverMassPhysicalDimensions = typename DividePhysicalDimensions<Length, Mass>::Result;
+
+	static_assert(std::is_same<LengthOverMassPhysicalDimensions,
+			                   typename ResultAreaType::PhysicalUnits::PhysicalDimensions>::value,
+	              "Resulting dimension of the product of physical quantity vectors is incorrect.");
+
+	EXPECT_EQ(0.055997414594958905503635345542,
+	          static_cast<double>(ResultAreaType::PhysicalUnits::Scale::num) /
+	          static_cast<double>(ResultAreaType::PhysicalUnits::Scale::den));
+}
+
 } // End of namespace units.
 } // End of namespace cppYard.

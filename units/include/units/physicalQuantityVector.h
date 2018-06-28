@@ -157,57 +157,159 @@ private:
 	FloatType mValue;
 };
 
-/*
 
-/// Operator to add physical quantities of same physical units but possibly different float
-/// representation. The static_cast is a compile time operation that has no run-time cost. So, there is
-/// no value in defining an overload of the operator with same floating point arguments.
-template<typename PhysicalUnitsType, typename LhsFloatType, typename RhsFloatType>
-PhysicalQuantityVector<PhysicalUnitsType, LhsFloatType> operator+(
-		const PhysicalQuantityVector<PhysicalUnitsType, LhsFloatType> lhs,
-		const PhysicalQuantityVector<PhysicalUnitsType, RhsFloatType> rhs) noexcept (true)
+/**
+ * @brief   Helper class to compute the type of the result when multiplying two @class PhysicalQuantityVectors.
+ *
+ * @tparam  LhsPhysicalQuantityVector_  LHS physical quantity vector type.
+ *
+ * @tparam  RhsPhysicalQuantityVector_  RHS physical quantity vector type.
+ */
+template<typename LhsPhysicalQuantityVector_, typename RhsPhysicalQuantityVector_>
+class MultiplyPhysicalQuantityVector
 {
-	return PhysicalQuantityVector<PhysicalUnitsType, LhsFloatType>(lhs.mValue + static_cast<LhsFloatType>(rhs.mValue));
+public:
+	/// Alias of the LHS physical quantity vector.
+	using LhsPhysicalQuantityVector = LhsPhysicalQuantityVector_;
+
+	/// Alias of the RHS physical quantity vector.
+	using RhsPhysicalQuantityVector = RhsPhysicalQuantityVector_;
+
+	// Assert same floating point representation underlying the LHS and RHS physical quantity types.
+	static_assert(std::is_same<typename LhsPhysicalQuantityVector::FloatType,
+			              typename RhsPhysicalQuantityVector::FloatType>::value,
+	              "You mixed different floating point representations. Use cast<> to change floating point"
+	              " representation of operands before performing the operations.");
+
+	/// Alias of self-type.
+	using SelfType = MultiplyPhysicalQuantityVector<LhsPhysicalQuantityVector , RhsPhysicalQuantityVector>;
+
+	/// Resulting type after multiplication of LHS and RHS quantity vectors.
+	using Result = PhysicalQuantityVector<
+			typename MultiplyPhysicalUnits<
+					typename LhsPhysicalQuantityVector::PhysicalUnits,
+					typename RhsPhysicalQuantityVector::PhysicalUnits>::Result,
+			typename LhsPhysicalQuantityVector::FloatType>;
+
+	/// Deleted constructor and destructors.
+	MultiplyPhysicalQuantityVector() = delete;
+
+	MultiplyPhysicalQuantityVector(const MultiplyPhysicalQuantityVector&) = delete;
+
+	MultiplyPhysicalQuantityVector(MultiplyPhysicalQuantityVector&&) = delete;
+
+	~MultiplyPhysicalQuantityVector() = delete;
+
+	/// Deleted assignment operators.
+	SelfType& operator=(const SelfType&) = delete;
+
+	SelfType& operator=(SelfType&&) = delete;
 };
 
-/// Operator to add physical quantities of same physical dimensions but different scale and float representation.
+/**
+ * @brief   Helper class to compute the type of the result when dividing two @class PhysicalQuantityVectors.
+ *
+ * @tparam  LhsPhysicalQuantityVector_  LHS physical quantity vector type.
+ *
+ * @tparam  RhsPhysicalQuantityVector_  RHS physical quantity vector type.
+ */
+template<typename LhsPhysicalQuantityVector_, typename RhsPhysicalQuantityVector_>
+class DividePhysicalQuantityVector
+{
+public:
+	/// Alias of the LHS physical quantity vector.
+	using LhsPhysicalQuantityVector = LhsPhysicalQuantityVector_;
+
+	/// Alias of the RHS physical quantity vector.
+	using RhsPhysicalQuantityVector = RhsPhysicalQuantityVector_;
+
+	// Assert same floating point representation underlying the LHS and RHS physical quantity types.
+	static_assert(std::is_same<typename LhsPhysicalQuantityVector::FloatType,
+			              typename RhsPhysicalQuantityVector::FloatType>::value,
+	              "You mixed different floating point representations. Use cast<> to change floating point"
+	              " representation of operands before performing the operations.");
+
+	/// Alias of self-type.
+	using SelfType = DividePhysicalQuantityVector<LhsPhysicalQuantityVector , RhsPhysicalQuantityVector>;
+
+	/// Resulting type after multiplication of LHS and RHS quantity vectors.
+	using Result = PhysicalQuantityVector<
+			typename DividePhysicalUnits<
+					typename LhsPhysicalQuantityVector::PhysicalUnits,
+					typename RhsPhysicalQuantityVector::PhysicalUnits>::Result,
+			typename LhsPhysicalQuantityVector::FloatType>;
+
+	/// Deleted constructor and destructors.
+	DividePhysicalQuantityVector() = delete;
+
+	DividePhysicalQuantityVector(const DividePhysicalQuantityVector&) = delete;
+
+	DividePhysicalQuantityVector(DividePhysicalQuantityVector&&) = delete;
+
+	~DividePhysicalQuantityVector() = delete;
+
+	/// Deleted assignment operators.
+	SelfType& operator=(const SelfType&) = delete;
+
+	SelfType& operator=(SelfType&&) = delete;
+};
+
+
+
+/// Addition operator
+template<typename PhysicalQuantityVectorType>
+constexpr PhysicalQuantityVectorType operator+(const PhysicalQuantityVectorType lhs,
+                                               const PhysicalQuantityVectorType rhs) noexcept(true)
+{
+    return PhysicalQuantityVectorType(lhs.scalar() + rhs.scalar());
+}
+
+/// Heterogeneous Addition operator.
 template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
-LhsPhysicalQuantityVector operator+(const LhsPhysicalQuantityVector lhs,
-									const RhsPhysicalQuantityVector rhs) noexcept(true)
+constexpr LhsPhysicalQuantityVector operator+(const LhsPhysicalQuantityVector lhs,
+                                              const RhsPhysicalQuantityVector rhs) noexcept(true)
 {
-	return lhs + LhsPhysicalQuantityVector(rhs);
+    return lhs + LhsPhysicalQuantityVector(rhs);
 };
 
-/// Operator to subtract physical quantities of same physical units but possibly different float
-/// representation. The static_cast is a compile time operation that has no run-time cost. So, there is
-/// no value in defining an overload of the operator with same floating point arguments.
-template<typename PhysicalUnitsType, typename LhsFloatType, typename RhsFloatType>
-PhysicalQuantityVector<PhysicalUnitsType, LhsFloatType> operator-(
-		const PhysicalQuantityVector<PhysicalUnitsType, LhsFloatType> lhs,
-		const PhysicalQuantityVector<PhysicalUnitsType, RhsFloatType> rhs) noexcept (true)
+/// Subtraction operator.
+template<typename PhysicalQuantityVectorType>
+constexpr PhysicalQuantityVectorType operator-(const PhysicalQuantityVectorType lhs,
+                                               const PhysicalQuantityVectorType rhs) noexcept(true)
 {
-	return PhysicalQuantityVector<PhysicalUnitsType, LhsFloatType>(lhs.mValue - static_cast<LhsFloatType>(rhs.mValue));
-};
+    return PhysicalQuantityVectorType(lhs.scalar() - rhs.scalar());
+}
 
-/// Operator to subtract physical quantities of same physical dimensions but different scale and float representation.
+/// Heterogeneous subtraction operator.
 template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
-LhsPhysicalQuantityVector operator-(const LhsPhysicalQuantityVector lhs,
-									const RhsPhysicalQuantityVector rhs) noexcept(true)
+constexpr LhsPhysicalQuantityVector operator-(const LhsPhysicalQuantityVector lhs,
+                                              const RhsPhysicalQuantityVector rhs) noexcept(true)
 {
-	return lhs - LhsPhysicalQuantityVector(rhs);
+    return lhs - LhsPhysicalQuantityVector(rhs);
 };
-*/
+
+
 /// Multiplication operator
+template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
+constexpr typename MultiplyPhysicalQuantityVector<LhsPhysicalQuantityVector, RhsPhysicalQuantityVector>::Result
+operator*(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector rhs) noexcept(true)
+{
+    using ResultType = typename MultiplyPhysicalQuantityVector<
+            LhsPhysicalQuantityVector, RhsPhysicalQuantityVector>::Result;
 
-/// Pre scalar multiplication operator
-
-/// Post scalar multiplication operator
+    return ResultType(lhs.scalar() * rhs.scalar());
+};
 
 /// Division operator
+template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
+constexpr typename DividePhysicalQuantityVector<LhsPhysicalQuantityVector, RhsPhysicalQuantityVector>::Result
+operator/(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector rhs) noexcept(true)
+{
+	using ResultType = typename DividePhysicalQuantityVector<
+			LhsPhysicalQuantityVector, RhsPhysicalQuantityVector>::Result;
 
-/// Pre scalar division operator
-
-/// Post scalar division operator
+	return ResultType(lhs.scalar() / rhs.scalar());
+};
 
 /// Equality
 
