@@ -229,6 +229,96 @@ TEST(PhysicalQuantityVector, MultiplicationOperator)
 	EXPECT_EQ(20.0, area1.scalar());
 }
 
+TEST(PhysicalQuantityVector, DivisionOperator)
+{
+	const Metres m1(4.0);
+	const Inches i1(5.0);
+
+	const auto area1 = m1 / i1;
+
+	EXPECT_EQ(0.8, area1.scalar());
+}
+
+TEST(PhysicalQuantityVector, EqualityOperator)
+{
+	EXPECT_TRUE(Metres(5.0) == Metres(5.0));
+	EXPECT_FALSE(Inches(3.0) == Inches(4.0));
+}
+
+TEST(PhysicalQuantityVector, HeterogeneousEqualityOperator)
+{
+	EXPECT_TRUE(Metres(0.0254) == Inches(1.0));
+	EXPECT_FALSE(Metres(3.0) == Inches(3.0));
+}
+
+TEST(PhysicalQuantityVector, InequalityOperator)
+{
+	EXPECT_FALSE(Metres(5.0) != Metres(5.0));
+	EXPECT_TRUE(Inches(3.0) != Inches(4.0));
+}
+
+TEST(PhysicalQuantityVector, HeterogeneousInequalityOperator)
+{
+	EXPECT_FALSE(Metres(0.0254) != Inches(1.0));
+	EXPECT_TRUE(Metres(3.0) != Inches(3.0));
+}
+
+TEST(PhysicalQuantityVector, LesserThanInequalityOperator)
+{
+	EXPECT_FALSE(Metres(5.0) < Metres(4.0));
+	EXPECT_FALSE(Metres(4.0) < Metres(4.0));
+	EXPECT_TRUE(Metres(3.9) < Metres(4.0));
+}
+
+TEST(PhysicalQuantityVector, HeterogeneousLesserThanInequalityOperator)
+{
+	EXPECT_FALSE(Metres(0.0255) < Inches(1.0));
+	EXPECT_FALSE(Metres(0.0254) < Inches(1.0));
+	EXPECT_TRUE(Metres(0.0253) < Inches(1.0));
+}
+
+TEST(PhysicalQuantityVector, LesserThanOrEqualToInequalityOperator)
+{
+	EXPECT_FALSE(Metres(5.0) <= Metres(4.0));
+	EXPECT_TRUE(Metres(4.0) <= Metres(4.0));
+	EXPECT_TRUE(Inches(3.0) <= Inches(4.0));
+}
+
+TEST(PhysicalQuantityVector, HeterogeneousLesserThanOrEqualToInequalityOperator)
+{
+	EXPECT_FALSE(Metres(0.0255) <= Inches(1.0));
+	EXPECT_TRUE(Metres(0.0254) <= Inches(1.0));
+	EXPECT_TRUE(Metres(0.0253) <= Inches(1.0));
+}
+
+TEST(PhysicalQuantityVector, GreaterThanInequalityOperator)
+{
+	EXPECT_TRUE(Metres(5.0) > Metres(4.0));
+	EXPECT_FALSE(Metres(4.0) > Metres(4.0));
+	EXPECT_FALSE(Metres(3.9) > Metres(4.0));
+}
+
+TEST(PhysicalQuantityVector, HeterogeneousGreaterThanInequalityOperator)
+{
+	EXPECT_TRUE(Metres(0.0255) > Inches(1.0));
+	EXPECT_FALSE(Metres(0.0254) > Inches(1.0));
+	EXPECT_FALSE(Metres(0.0253) > Inches(1.0));
+}
+
+TEST(PhysicalQuantityVector, GreaterThanOrEqualToInequalityOperator)
+{
+	EXPECT_TRUE(Metres(5.0) >= Metres(4.0));
+	EXPECT_TRUE(Metres(4.0) >= Metres(4.0));
+	EXPECT_FALSE(Inches(3.0) >= Inches(4.0));
+}
+
+TEST(PhysicalQuantityVector, HeterogeneousGreaterThanOrEqualToInequalityOperator)
+{
+	EXPECT_TRUE(Metres(0.0255) >= Inches(1.0));
+	EXPECT_TRUE(Metres(0.0254) >= Inches(1.0));
+	EXPECT_FALSE(Metres(0.0253) >= Inches(1.0));
+}
+
 TEST(MultiplyPhysicalQuantityVector, StaticChecks)
 {
 	using MultiplyInchesAndPounds = MultiplyPhysicalQuantityVector<Inches, Pounds>;

@@ -254,15 +254,13 @@ public:
 	SelfType& operator=(SelfType&&) = delete;
 };
 
-
-
 /// Addition operator
 template<typename PhysicalQuantityVectorType>
 constexpr PhysicalQuantityVectorType operator+(const PhysicalQuantityVectorType lhs,
                                                const PhysicalQuantityVectorType rhs) noexcept(true)
 {
     return PhysicalQuantityVectorType(lhs.scalar() + rhs.scalar());
-}
+};
 
 /// Heterogeneous Addition operator.
 template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
@@ -278,7 +276,7 @@ constexpr PhysicalQuantityVectorType operator-(const PhysicalQuantityVectorType 
                                                const PhysicalQuantityVectorType rhs) noexcept(true)
 {
     return PhysicalQuantityVectorType(lhs.scalar() - rhs.scalar());
-}
+};
 
 /// Heterogeneous subtraction operator.
 template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
@@ -311,17 +309,93 @@ operator/(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector r
 	return ResultType(lhs.scalar() / rhs.scalar());
 };
 
-/// Equality
+/// Equality operator.
+template<typename PhysicalQuantityVectorType>
+constexpr bool operator==(const PhysicalQuantityVectorType lhs, const PhysicalQuantityVectorType rhs) noexcept(true)
+{
+	return lhs.scalar() == rhs.scalar();
+};
 
-/// Non-equality
+/// Heterogeneous equality operator.
+template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
+constexpr bool operator==(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector rhs) noexcept(true)
+{
+	return lhs == LhsPhysicalQuantityVector(rhs);
+};
 
-/// Lesser than inequality
 
-/// Lesser than or equal-to inequality
+/// Inequality operator.
+template<typename PhysicalQuantityVectorType>
+constexpr bool operator!=(const PhysicalQuantityVectorType lhs, const PhysicalQuantityVectorType rhs) noexcept(true)
+{
+	return lhs.scalar() != rhs.scalar();
+};
 
-/// Greater than inequality
+/// Heterogeneous inequality operator.
+template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
+constexpr bool operator!=(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector rhs) noexcept(true)
+{
+	return lhs != LhsPhysicalQuantityVector(rhs);
+};
 
-/// Greater than or equal-to inequality
+
+/// Lesser than inequality operator.
+template<typename PhysicalQuantityVectorType>
+constexpr bool operator<(const PhysicalQuantityVectorType lhs, const PhysicalQuantityVectorType rhs) noexcept(true)
+{
+	return lhs.scalar() < rhs.scalar();
+};
+
+/// Heterogeneous lesser than equality operator.
+template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
+constexpr bool operator<(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector rhs) noexcept(true)
+{
+	return lhs < LhsPhysicalQuantityVector(rhs);
+};
+
+
+/// Lesser than or equal-to inequality operator.
+template<typename PhysicalQuantityVectorType>
+constexpr bool operator<=(const PhysicalQuantityVectorType lhs, const PhysicalQuantityVectorType rhs) noexcept(true)
+{
+	return lhs.scalar() <= rhs.scalar();
+};
+
+/// Heterogeneous lesser than or equal-to equality operator.
+template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
+constexpr bool operator<=(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector rhs) noexcept(true)
+{
+	return lhs <= LhsPhysicalQuantityVector(rhs);
+};
+
+/// Greater than inequality operator.
+template<typename PhysicalQuantityVectorType>
+constexpr bool operator>(const PhysicalQuantityVectorType lhs, const PhysicalQuantityVectorType rhs) noexcept(true)
+{
+	return lhs.scalar() > rhs.scalar();
+};
+
+/// Heterogeneous Greater than equality operator.
+template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
+constexpr bool operator>(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector rhs) noexcept(true)
+{
+	return lhs > LhsPhysicalQuantityVector(rhs);
+};
+
+
+/// Greater than or equal-to inequality operator.
+template<typename PhysicalQuantityVectorType>
+constexpr bool operator>=(const PhysicalQuantityVectorType lhs, const PhysicalQuantityVectorType rhs) noexcept(true)
+{
+	return lhs.scalar() >= rhs.scalar();
+};
+
+/// Heterogeneous Greater than or equal-to equality operator.
+template<typename LhsPhysicalQuantityVector, typename RhsPhysicalQuantityVector>
+constexpr bool operator>=(const LhsPhysicalQuantityVector lhs, const RhsPhysicalQuantityVector rhs) noexcept(true)
+{
+	return lhs >= LhsPhysicalQuantityVector(rhs);
+};
 
 
 } // End of namespace units.
