@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5.0)
 
 #[[ Set the name of the project and provide language specification. ]]
-project(cppYard VERSION 0.1.2.0 LANGUAGES C CXX)
+project(cppYard VERSION 0.1.0.0 LANGUAGES C CXX)
 
 #[[ Set CMAKE_CXX_STANDARD. ${CMAKE_CXX_STANDARD} sets the initial value for ${CXX_STANDARD} on
     all targets unless specified otherwise. ]]
