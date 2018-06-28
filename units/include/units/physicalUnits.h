@@ -19,7 +19,7 @@ namespace units
  *                              its SI counterpart.
  * 								TIP: Read it as ScaleToSI.
  */
-template<typename PhysicalDimensions_, typename Scale_ = std::ratio<1,1>>
+template<typename PhysicalDimensions_, typename Scale_>
 class PhysicalUnits
 {
 public:
