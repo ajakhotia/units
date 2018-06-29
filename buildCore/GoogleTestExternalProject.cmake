@@ -76,10 +76,6 @@ function(add_gtest test_name test_file)
 	# Link the test against gtest pthreads
 	target_link_libraries(${test_name} ${ARGN} gtest_main gtest pthread)
 
-	# Set the install location for the test.
-	install(TARGETS ${test_name}
-			RUNTIME DESTINATION test)
-
 	# Add the test to the Ctest to enable running of "$ make test".
 	add_test(NAME ${test_name}_gtest COMMAND ${test_name})
 endfunction()
@@ -94,10 +90,6 @@ function(add_gmock test_name test_file)
 
     # Link the test against gtest pthreads
     target_link_libraries(${test_name} ${ARGN} gmock_main gmock pthread)
-
-    # Set the install location for the test.
-    install(TARGETS ${test_name}
-            RUNTIME DESTINATION test)
 
     # Add the test to the Ctest to enable running of "$ make test".
     add_test(NAME ${test_name}_gmock COMMAND ${test_name})

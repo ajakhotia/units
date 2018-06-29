@@ -46,102 +46,93 @@ enum class BuildType : size_t
 };
 
 /**
- * @brief	Provides build information at compile and run time. The compile time information is provided
- * 			using constexpr methods.
+ * @brief	Gives the major version of the project at compile and run time.
+ *
+ * @return	Major version of the project.
  */
-class BuildInformation
+constexpr size_t ProjectMajorVersion() noexcept(true)
 {
-public:
-	/**
-	 * @breif	Deleted constructor to prevent instantiation of this class.
-	 */
-	constexpr BuildInformation() = delete;
+	return @PROJECT_VERSION_MAJOR@;
+}
 
-	/**
-	 * @brief	Deleted constructor as this class is not meant to be instantiated.
-	 */
-	~BuildInformation() = delete;
+/**
+ * @brief	Gives the minor version of the project at compile and run time.
+ *
+ * @return	Major version of the project.
+ */
+constexpr size_t ProjectMinorVersion() noexcept(true)
+{
+	return @PROJECT_VERSION_MINOR@;
+}
 
-	/**
-	 * @brief	Gives the major version of the project at compile and run time.
-	 *
- 	 * @return	Major version of the project.
- 	 */
-	static constexpr size_t ProjectMajorVersion() noexcept(true)
-	{
-		return mMajorVersion;
-	}
+/**
+ * @brief	Gives the major version of the project at compile and run time.
+ *
+ * @return	Major version of the project.
+ */
+static constexpr size_t ProjectPatchVersion() noexcept(true)
+{
+	return @PROJECT_VERSION_PATCH@;
+}
 
-	/**
-	 * @brief	Gives the minor version of the project at compile and run time.
-	 *
- 	 * @return	Major version of the project.
- 	 */
-	static constexpr size_t ProjectMinorVersion() noexcept(true)
-	{
-		return mMinorVersion;
-	}
+/**
+ * @brief	Gives the major version of the project at compile and run time.
+ *
+ * @return	Major version of the project.
+ */
+constexpr size_t ProjectTweakVersion() noexcept(true)
+{
+	return @PROJECT_VERSION_TWEAK@;
+}
 
-	/**
-	 * @brief	Gives the major version of the project at compile and run time.
-	 *
- 	 * @return	Major version of the project.
- 	 */
-	static constexpr size_t ProjectPatchVersion() noexcept(true)
-	{
-		return mPatchVersion;
-	}
+/**
+ * @breif	Gives the full version string of the build.
+ *
+ * @return	Full version of the project.
+ */
+constexpr const char* ProjectVersion() noexcept(true)
+{
+	return "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.@PROJECT_VERSION_TWEAK@";
+}
 
-	/**
-	 * @brief	Gives the major version of the project at compile and run time.
-	 *
- 	 * @return	Major version of the project.
- 	 */
-	static constexpr size_t ProjectTweakVersion() noexcept(true)
-	{
-		return mTweakVersion;
-	}
+/**
+ * @brief	Gives the build type of the project at compile and run time.
+ *
+ * @return	Build type of the project.
+ */
+constexpr BuildType ProjectBuildType() noexcept(true)
+{
+	return BuildType::@CMAKE_BUILD_TYPE@;
+}
 
-	/**
-	 * @breif	Gives the full version string of the build.
-	 *
-	 * @return	Full version of the project.
-	 */
-	static constexpr const char* ProjectVersion() noexcept(true)
-	{
-		return mVersion;
-	}
+/**
+ * @brief	Equality operator. Constexpr required that this operator be defined in the header.
+ *
+ * @param 	lhs		LHS build type.
+ *
+ * @param 	rhs		RHS build type.
+ *
+ * @return 	True if the operands are equal, false otherwise.
+ */
+constexpr bool operator==(const BuildType lhs, const BuildType rhs) noexcept(true)
+{
+	return static_cast<size_t>(lhs) == static_cast<size_t>(rhs);
+}
 
-	/**
-	 * @brief	Gives the build type of the project at compile and run time.
-	 *
-	 * @return	Build type of the project.
-	 */
-	static constexpr BuildType ProjectBuildType() noexcept(true)
-	{
-		return mBuildType;
-	}
+/**
+ * @brief	In-equality operator. Constexpr required that this operator be defined in the header.
+ *
+ * @param 	lhs		LHS build type.
+ *
+ * @param 	rhs		RHS build type.
+ *
+ * @return 	False if the operands are equal, true otherwise.
+ */
+constexpr bool operator!=(const BuildType lhs, const BuildType rhs) noexcept(true)
+{
+	return static_cast<size_t>(lhs) != static_cast<size_t>(rhs);
+}
 
-private:
-	/** Set to major version of the software by the build system. */
-	static constexpr const size_t mMajorVersion = @PROJECT_VERSION_MAJOR@;
-
-	/** Set to major version of the software by the build system. */
-	static constexpr const size_t mMinorVersion = @PROJECT_VERSION_MINOR@;
-
-	/** Set to major version of the software by the build system. */
-	static constexpr const size_t mPatchVersion = @PROJECT_VERSION_PATCH@;
-
-	/** Set to major version of the software by the build system. */
-	static constexpr const size_t mTweakVersion = @PROJECT_VERSION_TWEAK@;
-
-	/** Set to the version string by the build system. */
-	static constexpr const char* const mVersion = "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@."
-			"@PROJECT_VERSION_PATCH@.@PROJECT_VERSION_TWEAK@";
-
-	/** Set to the build type of the project by the build system. */
-	static constexpr const BuildType mBuildType = BuildType::@CMAKE_BUILD_TYPE@;
-};
 
 /**
  * @bried	Stream insertion operator for build type enumerations.
