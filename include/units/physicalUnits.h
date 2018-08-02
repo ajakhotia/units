@@ -25,8 +25,6 @@
 
 #include "physicalDimensions.h"
 
-namespace cppYard
-{
 namespace units
 {
 
@@ -192,4 +190,3 @@ public:
 
 
 } // End of namespace units.
-} // End of namespace cppYard.

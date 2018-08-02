@@ -4,7 +4,7 @@ A type-safe representation of physical units with zero run-time overhead. The ty
 ## Examples
 
 ```
-using namespace cppYard::units;
+using namespace units;
 
 const Metres m1(5.0);     // Has dimensions of (L^(1,0), M^(0,0), T^(0,0), I^(0,0), K^(0,0), N^(0,0), J^(0,0)) and scale (1/1)
 const Inches i1(2.0);     // Has dimensions of (L^(1,0), M^(0,0), T^(0,0), I^(0,0), K^(0,0), N^(0,0), J^(0,0)) and scale (127/5000)

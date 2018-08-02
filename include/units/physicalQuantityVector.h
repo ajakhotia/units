@@ -26,8 +26,6 @@
 #include "physicalUnits.h"
 #include <ostream>
 
-namespace cppYard
-{
 namespace units
 {
 
@@ -419,4 +417,3 @@ constexpr bool operator>=(const LhsPhysicalQuantityVector lhs, const RhsPhysical
 
 
 } // End of namespace units.
-} // End of namespace cppYard.

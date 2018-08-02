@@ -25,8 +25,6 @@
 
 #include <ratio>
 
-namespace cppYard
-{
 namespace units
 {
 
@@ -224,4 +222,3 @@ using Acceleration = typename DividePhysicalDimensions<Speed, Time>::Result;
 using Force = typename MultiplyPhysicalDimensions<Mass, Acceleration>::Result; // May the force be with you :D !!!
 
 } // End of namespace units.
-} // End of namespace cppYard.

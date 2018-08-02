@@ -25,8 +25,6 @@
 
 #include "physicalQuantityVector.h"
 
-namespace cppYard
-{
 namespace units
 {
 
@@ -79,4 +77,3 @@ using Moles = PhysicalQuantityVector<MolesPhysicalUnits, double>;
 using Candela = PhysicalQuantityVector<CandelaPhysicalUnit, double>;
 
 } // End of namespace units.
-} // End of namespace cppYard.

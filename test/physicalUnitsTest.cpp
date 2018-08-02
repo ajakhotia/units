@@ -25,8 +25,6 @@
 #include <units/imperial.h>
 #include <gtest/gtest.h>
 
-namespace cppYard
-{
 namespace units
 {
 
@@ -124,4 +122,3 @@ TEST(DividePhysicalUnits, StaticChecks)
 }
 
 } // End of namespace units.
-} // End of namespace cppYard.
