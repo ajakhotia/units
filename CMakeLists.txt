@@ -12,14 +12,15 @@ set(CMAKE_CXX_STANDARD 14)
     using the specified C++ standard due to compiler limitations. ]]
 set(CMAKE_CXX_STANDARD_REQUIRED ON BOOL)
 
-#[[ Add gtest as external project. ]]
-include(buildCore/GoogleTestExternalProject.cmake)
+#[[ Find gtest that is necessary for building tests. We will skip building tests if we fail to find gtest. ]]
+find_package(GTest 1.8)
 
-setup_gtest_external_project(
-		https://github.com/google/googletest.git
-		release-1.8.0
-		${PROJECT_BINARY_DIR}/external/build
-		${PROJECT_BINARY_DIR}/external/install)
+#[[ Enable testing only if gtest target is available. Include(CTest) should setup the build correctly and
+    set BUILD_TESTING flag to true. BUILD_TESTING should be the only flag that should be used to figure out if
+    or not to add tests sub-directory. ]]
+if((TARGET GTest::GTest) AND (TARGET GTest::Main))
+    include(CTest)
+endif((TARGET GTest::GTest) AND (TARGET GTest::Main))
 
 #[[ Create an INTERFACE target as this library is header-only. ]]
 add_library(units INTERFACE)
