@@ -30,7 +30,7 @@ namespace units
 
 /// Physical units to measure angles in imperial system.
 
-/// Physical units to measure lenght in imperial system.
+/// Physical units to measure length in imperial system.
 using InchesPhysicalUnit = PhysicalUnits<Length, std::ratio<254, 10000>>;
 using FeetPhysicalUnit = PhysicalUnits<Length, std::ratio<3048, 10000>>;
 

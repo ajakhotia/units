@@ -109,7 +109,6 @@ TEST(PhysicalQuantityVector, HeterogenousAdditionAssignment)
 {
 	Metres m1(5.0);
 	const Inches i1(30.0);
-	const PhysicalQuantityVector<InchesPhysicalUnit, float> i2(7.f);
 
 	m1 += i1;
 
@@ -130,7 +129,6 @@ TEST(PhysicalQuantityVector, HeterogenousSubstractionAssignment)
 {
 	Metres m1(5.0);
 	const Inches i1(30.0);
-	const PhysicalQuantityVector<InchesPhysicalUnit, float> i2(7.f);
 
 	m1 -= i1;
 

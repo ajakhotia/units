@@ -114,7 +114,7 @@ TEST(DividePhysicalUnits, StaticChecks)
 
 	static_assert(std::is_same<typename DividePhysicalDimensions<Length, Mass>::Result,
 						  typename Result::PhysicalDimensions>::value,
-				  "Dimension of the resulting physical unit is incorrcetly computed in @class DividePhysicalUnits");
+				  "Dimension of the resulting physical unit is incorrectly computed in @class DividePhysicalUnits");
 
 	static_assert(std::is_same<std::ratio<100000000, 45359237>,
 						  typename Result::Scale>::value,
