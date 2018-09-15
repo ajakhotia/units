@@ -41,28 +41,28 @@ template<typename PhysicalDimensions_, typename Scale_>
 class PhysicalUnits
 {
 public:
-	/// Alias of the physical dimensions of the represented unit.
-	using PhysicalDimensions = PhysicalDimensions_;
+    /// Alias of the physical dimensions of the represented unit.
+    using PhysicalDimensions = PhysicalDimensions_;
 
-	/// Alias of the scale to SI of the represented unit. PhysicalUnit * Scale = SI-equivalent unit.
-	using Scale = Scale_;
+    /// Alias of the scale to SI of the represented unit. PhysicalUnit * Scale = SI-equivalent unit.
+    using Scale = Scale_;
 
-	/// Alias of self type.
-	using SelfType = PhysicalUnits<PhysicalDimensions, Scale>;
+    /// Alias of self type.
+    using SelfType = PhysicalUnits<PhysicalDimensions, Scale>;
 
-	/// Deleted constructors and destructors.
-	PhysicalUnits() = delete;
+    /// Deleted constructors and destructors.
+    PhysicalUnits() = delete;
 
-	PhysicalUnits(const PhysicalUnits&) = delete;
+    PhysicalUnits(const PhysicalUnits&) = delete;
 
-	PhysicalUnits(PhysicalUnits&&) = delete;
+    PhysicalUnits(PhysicalUnits&&) = delete;
 
-	~PhysicalUnits() = delete;
+    ~PhysicalUnits() = delete;
 
-	/// Deleted assignment operators.
-	SelfType& operator=(const SelfType&) = delete;
+    /// Deleted assignment operators.
+    SelfType& operator=(const SelfType&) = delete;
 
-	SelfType& operator=(SelfType&&) = delete;
+    SelfType& operator=(SelfType&&) = delete;
 };
 
 /**
@@ -81,111 +81,111 @@ template<typename LhsPhysicalUnits_, typename RhsPhysicalUnits_, typename FloatT
 class PhysicalUnitsConversionHelper
 {
 public:
-	/// Alias of the LHS physical unit.
-	using LhsPhysicalUnits = LhsPhysicalUnits_;
+    /// Alias of the LHS physical unit.
+    using LhsPhysicalUnits = LhsPhysicalUnits_;
 
-	/// Alias of the RHS physical unit.
-	using RhsPhysicalUnits = RhsPhysicalUnits_;
+    /// Alias of the RHS physical unit.
+    using RhsPhysicalUnits = RhsPhysicalUnits_;
 
-	/// Alias of the Float type to represent the ratio.
-	using FloatType = FloatType_;
+    /// Alias of the Float type to represent the ratio.
+    using FloatType = FloatType_;
 
-	// Assert same physical dimensions for operand physical units.
-	static_assert(std::is_same<typename LhsPhysicalUnits::PhysicalDimensions,
-				  				typename RhsPhysicalUnits::PhysicalDimensions>::value,
-				"Requested scale computation for physical units of different physical dimensions.");
+    // Assert same physical dimensions for operand physical units.
+    static_assert(std::is_same<typename LhsPhysicalUnits::PhysicalDimensions,
+                          typename RhsPhysicalUnits::PhysicalDimensions>::value,
+                  "Requested scale computation for physical units of different physical dimensions.");
 
-	/// Alias of self-type.
-	using SelfType = PhysicalUnitsConversionHelper<LhsPhysicalUnits, RhsPhysicalUnits, FloatType>;
+    /// Alias of self-type.
+    using SelfType = PhysicalUnitsConversionHelper<LhsPhysicalUnits, RhsPhysicalUnits, FloatType>;
 
-	/// Scaling factor as a std::ratio to convert RHS physical unit type to LHS physical units type.
-	using Result = std::ratio_divide<typename RhsPhysicalUnits::Scale, typename LhsPhysicalUnits::Scale>;
+    /// Scaling factor as a std::ratio to convert RHS physical unit type to LHS physical units type.
+    using Result = std::ratio_divide<typename RhsPhysicalUnits::Scale, typename LhsPhysicalUnits::Scale>;
 
-	static constexpr const FloatType kFloatRatio{
-		static_cast<FloatType>(Result::num) / static_cast<FloatType>(Result::den)};
+    static constexpr const FloatType kFloatRatio{
+            static_cast<FloatType>(Result::num) / static_cast<FloatType>(Result::den)};
 
 
-	/// Deleted constructor and destructors.
-	PhysicalUnitsConversionHelper() = delete;
+    /// Deleted constructor and destructors.
+    PhysicalUnitsConversionHelper() = delete;
 
-	PhysicalUnitsConversionHelper(const PhysicalUnitsConversionHelper&) = delete;
+    PhysicalUnitsConversionHelper(const PhysicalUnitsConversionHelper&) = delete;
 
-	PhysicalUnitsConversionHelper(PhysicalUnitsConversionHelper&&) = delete;
+    PhysicalUnitsConversionHelper(PhysicalUnitsConversionHelper&&) = delete;
 
-	~PhysicalUnitsConversionHelper() = delete;
+    ~PhysicalUnitsConversionHelper() = delete;
 
-	/// Deleted assignment operators.
-	SelfType& operator=(const SelfType&) = delete;
+    /// Deleted assignment operators.
+    SelfType& operator=(const SelfType&) = delete;
 
-	SelfType& operator=(SelfType&&) = delete;
+    SelfType& operator=(SelfType&&) = delete;
 };
 
 template<typename LhsPhysicalUnits_, typename RhsPhysicalUnits_>
 class MultiplyPhysicalUnits
 {
 public:
-	/// Alias of LHS physical units.
-	using LhsPhysicalUnits = LhsPhysicalUnits_;
+    /// Alias of LHS physical units.
+    using LhsPhysicalUnits = LhsPhysicalUnits_;
 
-	/// Alias of the RHS physical units.
-	using RhsPhysicalUnits = RhsPhysicalUnits_;
+    /// Alias of the RHS physical units.
+    using RhsPhysicalUnits = RhsPhysicalUnits_;
 
-	/// Alias of self type for convenience.
-	using SelfType = MultiplyPhysicalUnits<LhsPhysicalUnits, RhsPhysicalUnits>;
+    /// Alias of self type for convenience.
+    using SelfType = MultiplyPhysicalUnits<LhsPhysicalUnits, RhsPhysicalUnits>;
 
-	/// Resulting physical units that is a multiplication of LHS and RHS.
-	using Result = PhysicalUnits<
-			typename MultiplyPhysicalDimensions<typename LhsPhysicalUnits::PhysicalDimensions,
-					                            typename RhsPhysicalUnits::PhysicalDimensions>::Result,
-			typename std::ratio_multiply<typename LhsPhysicalUnits::Scale, typename RhsPhysicalUnits::Scale>>;
+    /// Resulting physical units that is a multiplication of LHS and RHS.
+    using Result = PhysicalUnits<
+            typename MultiplyPhysicalDimensions<typename LhsPhysicalUnits::PhysicalDimensions,
+                    typename RhsPhysicalUnits::PhysicalDimensions>::Result,
+            typename std::ratio_multiply<typename LhsPhysicalUnits::Scale, typename RhsPhysicalUnits::Scale>>;
 
-	/// Deleted constructor and destructors.
-	MultiplyPhysicalUnits() = delete;
+    /// Deleted constructor and destructors.
+    MultiplyPhysicalUnits() = delete;
 
-	MultiplyPhysicalUnits(const MultiplyPhysicalUnits&) = delete;
+    MultiplyPhysicalUnits(const MultiplyPhysicalUnits&) = delete;
 
-	MultiplyPhysicalUnits(MultiplyPhysicalUnits&&) = delete;
+    MultiplyPhysicalUnits(MultiplyPhysicalUnits&&) = delete;
 
-	~MultiplyPhysicalUnits() = delete;
+    ~MultiplyPhysicalUnits() = delete;
 
-	/// Deleted assignment operators.
-	SelfType& operator=(const SelfType&) = delete;
+    /// Deleted assignment operators.
+    SelfType& operator=(const SelfType&) = delete;
 
-	SelfType& operator=(SelfType&&) = delete;
+    SelfType& operator=(SelfType&&) = delete;
 };
 
 template<typename LhsPhysicalUnits_, typename RhsPhysicalUnits_>
 class DividePhysicalUnits
 {
 public:
-	/// Alias of LHS physical units.
-	using LhsPhysicalUnits = LhsPhysicalUnits_;
+    /// Alias of LHS physical units.
+    using LhsPhysicalUnits = LhsPhysicalUnits_;
 
-	/// Alias of the RHS physical units.
-	using RhsPhysicalUnits = RhsPhysicalUnits_;
+    /// Alias of the RHS physical units.
+    using RhsPhysicalUnits = RhsPhysicalUnits_;
 
-	/// Alias of self type for convenience.
-	using SelfType = DividePhysicalUnits<LhsPhysicalUnits, RhsPhysicalUnits>;
+    /// Alias of self type for convenience.
+    using SelfType = DividePhysicalUnits<LhsPhysicalUnits, RhsPhysicalUnits>;
 
-	/// Resulting physical units that is a multiplication of LHS and RHS.
-	using Result = PhysicalUnits<
-			typename DividePhysicalDimensions<typename LhsPhysicalUnits::PhysicalDimensions,
-					                         typename RhsPhysicalUnits::PhysicalDimensions>::Result,
-			typename std::ratio_divide<typename LhsPhysicalUnits::Scale, typename RhsPhysicalUnits::Scale>>;
+    /// Resulting physical units that is a multiplication of LHS and RHS.
+    using Result = PhysicalUnits<
+            typename DividePhysicalDimensions<typename LhsPhysicalUnits::PhysicalDimensions,
+                    typename RhsPhysicalUnits::PhysicalDimensions>::Result,
+            typename std::ratio_divide<typename LhsPhysicalUnits::Scale, typename RhsPhysicalUnits::Scale>>;
 
-	/// Deleted constructor and destructors.
-	DividePhysicalUnits() = delete;
+    /// Deleted constructor and destructors.
+    DividePhysicalUnits() = delete;
 
-	DividePhysicalUnits(const DividePhysicalUnits&) = delete;
+    DividePhysicalUnits(const DividePhysicalUnits&) = delete;
 
-	DividePhysicalUnits(DividePhysicalUnits&&) = delete;
+    DividePhysicalUnits(DividePhysicalUnits&&) = delete;
 
-	~DividePhysicalUnits() = delete;
+    ~DividePhysicalUnits() = delete;
 
-	/// Deleted assignment operators.
-	SelfType& operator=(const SelfType&) = delete;
+    /// Deleted assignment operators.
+    SelfType& operator=(const SelfType&) = delete;
 
-	SelfType& operator=(SelfType&&) = delete;
+    SelfType& operator=(SelfType&&) = delete;
 };
 
 

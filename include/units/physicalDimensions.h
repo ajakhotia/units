@@ -56,48 +56,48 @@ namespace units
  * @tparam	J_	Ratio denoting the Luminous Intensity exponent of the physical unit.
  */
 template<typename L_ = std::ratio<0>, typename M_ = std::ratio<0>, typename T_ = std::ratio<0>,
-		typename I_ = std::ratio<0>, typename K_ = std::ratio<0>, typename N_ = std::ratio<0>,
-		typename J_ = std::ratio<0>>
+        typename I_ = std::ratio<0>, typename K_ = std::ratio<0>, typename N_ = std::ratio<0>,
+        typename J_ = std::ratio<0>>
 class PhysicalDimensions
 {
 public:
-	/// Alias of the Length exponent of the physical dimension.
-	using L = L_;
+    /// Alias of the Length exponent of the physical dimension.
+    using L = L_;
 
-	/// Alias of the Mass exponent of the physical dimension.
-	using M = M_;
+    /// Alias of the Mass exponent of the physical dimension.
+    using M = M_;
 
-	/// Alias of the Time exponent of the physical dimension.
-	using T = T_;
+    /// Alias of the Time exponent of the physical dimension.
+    using T = T_;
 
-	/// Alias of the Electric Current exponent of the physical dimension.
-	using I = I_;
+    /// Alias of the Electric Current exponent of the physical dimension.
+    using I = I_;
 
-	/// Alias of the Temperature exponent of the physical dimension.
-	using K = K_;
+    /// Alias of the Temperature exponent of the physical dimension.
+    using K = K_;
 
-	/// Alias of the Quantity of substance exponent of the physical dimension.
-	using N = N_;
+    /// Alias of the Quantity of substance exponent of the physical dimension.
+    using N = N_;
 
-	/// Alias of the Luminous Intensity exponent of the physical dimension.
-	using J = J_;
+    /// Alias of the Luminous Intensity exponent of the physical dimension.
+    using J = J_;
 
-	/// Alias of self for convenience.
-	using SelfType = PhysicalDimensions<L, M, T, I, K, N, J>;
+    /// Alias of self for convenience.
+    using SelfType = PhysicalDimensions<L, M, T, I, K, N, J>;
 
-	/// Deleted constructors and destructors.
-	PhysicalDimensions() = delete;
+    /// Deleted constructors and destructors.
+    PhysicalDimensions() = delete;
 
-	PhysicalDimensions(const PhysicalDimensions& otherPhysicalDimension) = delete;
+    PhysicalDimensions(const PhysicalDimensions& otherPhysicalDimension) = delete;
 
-	PhysicalDimensions(PhysicalDimensions&& otherPhysicalDimension) = delete;
+    PhysicalDimensions(PhysicalDimensions&& otherPhysicalDimension) = delete;
 
-	~PhysicalDimensions() = delete;
+    ~PhysicalDimensions() = delete;
 
-	/// Deleted assignment operators.
-	SelfType& operator=(const SelfType& otherPhysicalDimension) = delete;
+    /// Deleted assignment operators.
+    SelfType& operator=(const SelfType& otherPhysicalDimension) = delete;
 
-	SelfType& operator=(SelfType&& otherPhysicalDimension) = delete;
+    SelfType& operator=(SelfType&& otherPhysicalDimension) = delete;
 };
 
 /**
@@ -109,39 +109,39 @@ template<typename LhsPhysicalDimensions_, typename RhsPhysicalDimensions_>
 class MultiplyPhysicalDimensions
 {
 public:
-	/// Alisa LHS physical dimensions.
-	using LhsPhysicalDimensions = LhsPhysicalDimensions_;
+    /// Alisa LHS physical dimensions.
+    using LhsPhysicalDimensions = LhsPhysicalDimensions_;
 
-	/// Alisa RHS physical dimensions.
-	using RhsPhysicalDimensions = RhsPhysicalDimensions_;
+    /// Alisa RHS physical dimensions.
+    using RhsPhysicalDimensions = RhsPhysicalDimensions_;
 
-	/// Alias of self for convenience.
-	using SelfType = MultiplyPhysicalDimensions<LhsPhysicalDimensions, RhsPhysicalDimensions>;
+    /// Alias of self for convenience.
+    using SelfType = MultiplyPhysicalDimensions<LhsPhysicalDimensions, RhsPhysicalDimensions>;
 
-	/// Alias of the dimension-type resulting from the addition of @tparam LhsPhysicalDimensions
-	/// and @tparam RhsPhysicalDimensions
-	using Result = PhysicalDimensions<
-			std::ratio_add<typename LhsPhysicalDimensions::L, typename RhsPhysicalDimensions::L>,
-			std::ratio_add<typename LhsPhysicalDimensions::M, typename RhsPhysicalDimensions::M>,
-			std::ratio_add<typename LhsPhysicalDimensions::T, typename RhsPhysicalDimensions::T>,
-			std::ratio_add<typename LhsPhysicalDimensions::I, typename RhsPhysicalDimensions::I>,
-			std::ratio_add<typename LhsPhysicalDimensions::K, typename RhsPhysicalDimensions::K>,
-			std::ratio_add<typename LhsPhysicalDimensions::N, typename RhsPhysicalDimensions::N>,
-			std::ratio_add<typename LhsPhysicalDimensions::J, typename RhsPhysicalDimensions::J>>;
+    /// Alias of the dimension-type resulting from the addition of @tparam LhsPhysicalDimensions
+    /// and @tparam RhsPhysicalDimensions
+    using Result = PhysicalDimensions<
+            std::ratio_add<typename LhsPhysicalDimensions::L, typename RhsPhysicalDimensions::L>,
+            std::ratio_add<typename LhsPhysicalDimensions::M, typename RhsPhysicalDimensions::M>,
+            std::ratio_add<typename LhsPhysicalDimensions::T, typename RhsPhysicalDimensions::T>,
+            std::ratio_add<typename LhsPhysicalDimensions::I, typename RhsPhysicalDimensions::I>,
+            std::ratio_add<typename LhsPhysicalDimensions::K, typename RhsPhysicalDimensions::K>,
+            std::ratio_add<typename LhsPhysicalDimensions::N, typename RhsPhysicalDimensions::N>,
+            std::ratio_add<typename LhsPhysicalDimensions::J, typename RhsPhysicalDimensions::J>>;
 
-	/// Deleted constructor.
-	MultiplyPhysicalDimensions() = delete;
+    /// Deleted constructor.
+    MultiplyPhysicalDimensions() = delete;
 
-	MultiplyPhysicalDimensions(const MultiplyPhysicalDimensions& other) = delete;
+    MultiplyPhysicalDimensions(const MultiplyPhysicalDimensions& other) = delete;
 
-	MultiplyPhysicalDimensions(MultiplyPhysicalDimensions&& other) = delete;
+    MultiplyPhysicalDimensions(MultiplyPhysicalDimensions&& other) = delete;
 
-	~MultiplyPhysicalDimensions() = delete;
+    ~MultiplyPhysicalDimensions() = delete;
 
-	/// Deleted assignment operators.
-	SelfType& operator=(SelfType& other) = delete;
+    /// Deleted assignment operators.
+    SelfType& operator=(SelfType& other) = delete;
 
-	SelfType& operator=(SelfType&& other) = delete;
+    SelfType& operator=(SelfType&& other) = delete;
 };
 
 /**
@@ -153,39 +153,39 @@ template<typename LhsPhysicalDimensions_, typename RhsPhysicalDimensions_>
 class DividePhysicalDimensions
 {
 public:
-	/// Alisa LHS physical dimensions.
-	using LhsPhysicalDimensions = LhsPhysicalDimensions_;
+    /// Alisa LHS physical dimensions.
+    using LhsPhysicalDimensions = LhsPhysicalDimensions_;
 
-	/// Alisa RHS physical dimensions.
-	using RhsPhysicalDimensions = RhsPhysicalDimensions_;
+    /// Alisa RHS physical dimensions.
+    using RhsPhysicalDimensions = RhsPhysicalDimensions_;
 
-	/// Alias self-type for convenience.
-	using SelfType = DividePhysicalDimensions<LhsPhysicalDimensions, RhsPhysicalDimensions>;
+    /// Alias self-type for convenience.
+    using SelfType = DividePhysicalDimensions<LhsPhysicalDimensions, RhsPhysicalDimensions>;
 
-	/// Alias of the dimension-type resulting from the subtraction of @tparam LhsPhysicalDimensions
-	/// from @tparam RhsPhysicalDimensions
-	using Result = PhysicalDimensions<
-			std::ratio_subtract<typename LhsPhysicalDimensions::L, typename RhsPhysicalDimensions::L>,
-			std::ratio_subtract<typename LhsPhysicalDimensions::M, typename RhsPhysicalDimensions::M>,
-			std::ratio_subtract<typename LhsPhysicalDimensions::T, typename RhsPhysicalDimensions::T>,
-			std::ratio_subtract<typename LhsPhysicalDimensions::I, typename RhsPhysicalDimensions::I>,
-			std::ratio_subtract<typename LhsPhysicalDimensions::K, typename RhsPhysicalDimensions::K>,
-			std::ratio_subtract<typename LhsPhysicalDimensions::N, typename RhsPhysicalDimensions::N>,
-			std::ratio_subtract<typename LhsPhysicalDimensions::J, typename RhsPhysicalDimensions::J>>;
+    /// Alias of the dimension-type resulting from the subtraction of @tparam LhsPhysicalDimensions
+    /// from @tparam RhsPhysicalDimensions
+    using Result = PhysicalDimensions<
+            std::ratio_subtract<typename LhsPhysicalDimensions::L, typename RhsPhysicalDimensions::L>,
+            std::ratio_subtract<typename LhsPhysicalDimensions::M, typename RhsPhysicalDimensions::M>,
+            std::ratio_subtract<typename LhsPhysicalDimensions::T, typename RhsPhysicalDimensions::T>,
+            std::ratio_subtract<typename LhsPhysicalDimensions::I, typename RhsPhysicalDimensions::I>,
+            std::ratio_subtract<typename LhsPhysicalDimensions::K, typename RhsPhysicalDimensions::K>,
+            std::ratio_subtract<typename LhsPhysicalDimensions::N, typename RhsPhysicalDimensions::N>,
+            std::ratio_subtract<typename LhsPhysicalDimensions::J, typename RhsPhysicalDimensions::J>>;
 
-	/// Deleted constructors and destructors.
-	DividePhysicalDimensions() = delete;
+    /// Deleted constructors and destructors.
+    DividePhysicalDimensions() = delete;
 
-	DividePhysicalDimensions(const DividePhysicalDimensions& other) = delete;
+    DividePhysicalDimensions(const DividePhysicalDimensions& other) = delete;
 
-	DividePhysicalDimensions(DividePhysicalDimensions&& other) = delete;
+    DividePhysicalDimensions(DividePhysicalDimensions&& other) = delete;
 
-	~DividePhysicalDimensions() = delete;
+    ~DividePhysicalDimensions() = delete;
 
-	/// Deleted assignments operators.
-	SelfType& operator=(SelfType& other) = delete;
+    /// Deleted assignments operators.
+    SelfType& operator=(SelfType& other) = delete;
 
-	SelfType& operator=(SelfType&& other) = delete;
+    SelfType& operator=(SelfType&& other) = delete;
 };
 
 /// Convenience alias representing the basic/primary dimensions.
@@ -202,10 +202,10 @@ using Current = PhysicalDimensions<std::ratio<0>, std::ratio<0>, std::ratio<0>, 
 using Temperature = PhysicalDimensions<std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<1>>;
 
 using Substance = PhysicalDimensions<std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<0>,
-		std::ratio<1>>;
+        std::ratio<1>>;
 
 using LuminousIntensity = PhysicalDimensions<std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<0>,
-		std::ratio<0>, std::ratio<1>>;
+        std::ratio<0>, std::ratio<1>>;
 
 /// Convenience alias to represent secondary dimensions.
 using AngularSpeed = typename DividePhysicalDimensions<Angle, Time>::Result;
