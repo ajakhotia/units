@@ -23,7 +23,7 @@
  */
 #pragma once
 
-#include "physicalQuantityVector.h"
+#include "affineQuantity.h"
 
 namespace units
 {
@@ -53,27 +53,27 @@ using MolesPhysicalUnits = PhysicalUnits<Substance, std::ratio<1, 1>>;
 using CandelaPhysicalUnit = PhysicalUnits<LuminousIntensity, std::ratio<1, 1>>;
 
 /// Radians
-using Radians = PhysicalQuantityVector<RadiansPhysicalUnit, double>;
+using Radians = AffineQuantity<RadiansPhysicalUnit, double>;
 
 /// Meters
-using Metres = PhysicalQuantityVector<MetresPhysicalUnit, double>;
+using Metres = AffineQuantity<MetresPhysicalUnit, double>;
 
 /// Kilograms
-using Kilograms = PhysicalQuantityVector<KilogramsPhysicalUnit, double>;
+using Kilograms = AffineQuantity<KilogramsPhysicalUnit, double>;
 
 /// Seconds
-using Seconds = PhysicalQuantityVector<SecondsPhysicalUnit, double>;
+using Seconds = AffineQuantity<SecondsPhysicalUnit, double>;
 
 /// Ampere
-using Ampere = PhysicalQuantityVector<AmperesPhysicalUnit, double>;
+using Ampere = AffineQuantity<AmperesPhysicalUnit, double>;
 
 /// Kelvin temperature difference.
-using KelvinTemperatureDifference = PhysicalQuantityVector<KelvinPhysicalUnit, double>;
+using KelvinTemperatureDifference = AffineQuantity<KelvinPhysicalUnit, double>;
 
 /// Moles
-using Moles = PhysicalQuantityVector<MolesPhysicalUnits, double>;
+using Moles = AffineQuantity<MolesPhysicalUnits, double>;
 
 /// Candela
-using Candela = PhysicalQuantityVector<CandelaPhysicalUnit, double>;
+using Candela = AffineQuantity<CandelaPhysicalUnit, double>;
 
 } // End of namespace units.

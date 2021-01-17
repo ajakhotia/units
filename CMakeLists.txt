@@ -1,33 +1,38 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.10.0)
 
 #[[ Set the name of the project and provide language specification. ]]
-project(units VERSION 0.2.0.0 LANGUAGES C CXX)
+project(units VERSION 0.2.0.1 LANGUAGES C CXX)
 
-#[[ Set CMAKE_CXX_STANDARD. ${CMAKE_CXX_STANDARD} sets the initial value for ${CXX_STANDARD} on
-    all targets unless specified otherwise. ]]
-set(CMAKE_CXX_STANDARD 14)
-
-#[[ Set CMAKE_CXX_STANDARD_REQUIRED to ON. ${CMAKE_CXX_STANDARD_REQUITED} sets the initial value
-    for ${CXX_STANDARD_REQUIRED} which ensures that cmake WILL FAIL if a target is not compiled
-    using the specified C++ standard due to compiler limitations. ]]
-set(CMAKE_CXX_STANDARD_REQUIRED ON BOOL)
-
-#[[ Find gtest that is necessary for building tests. We will skip building tests if we fail to find gtest. ]]
-find_package(GTest 1.8)
+#[[ Find GTest as a required dependency if the user as requested building of unit tests. ]]
+if(BUILD_TESTING)
+	find_package(GTest REQUIRED)
+else()
+	find_package(GTest)
+endif()
 
 #[[ Enable testing only if gtest target is available. Include(CTest) should setup the build correctly and
     set BUILD_TESTING flag to true. BUILD_TESTING should be the only flag that should be used to figure out if
     or not to add tests sub-directory. ]]
 if((TARGET GTest::GTest) AND (TARGET GTest::Main))
     include(CTest)
-endif((TARGET GTest::GTest) AND (TARGET GTest::Main))
+endif()
 
 #[[ Create an INTERFACE target as this library is header-only. ]]
 add_library(units INTERFACE)
+add_library(Units::units ALIAS units)
 
 target_include_directories(units INTERFACE
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		$<INSTALL_INTERFACE:include>)
+
+target_compile_options(units INTERFACE -Wall -Wextra -pedantic)
+
+
+#[[ Build unit tests if requested. ]]
+if (BUILD_TESTING)
+	add_subdirectory(test)
+endif (BUILD_TESTING)
+
 
 install(DIRECTORY include/units
 		DESTINATION include
@@ -36,12 +41,8 @@ install(DIRECTORY include/units
 install(TARGETS units EXPORT unitsTargets COMPONENT units
 		RUNTIME DESTINATION bin
 		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib/static
+		ARCHIVE DESTINATION lib
 		INCLUDES DESTINATION include)
-
-if (BUILD_TESTING)
-	add_subdirectory(test)
-endif (BUILD_TESTING)
 
 
 #[[ Include cmake-default tools to help create export files. ]]

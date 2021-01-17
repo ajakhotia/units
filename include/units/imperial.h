@@ -23,7 +23,7 @@
  */
 #pragma once
 
-#include "physicalQuantityVector.h"
+#include "affineQuantity.h"
 
 namespace units
 {
@@ -38,12 +38,12 @@ using FeetPhysicalUnit = PhysicalUnits<Length, std::ratio<3048, 10000>>;
 using PoundsPhysicalUnit = PhysicalUnits<Mass, std::ratio<45359237, 100000000>>;
 
 /// Inches
-using Inches = PhysicalQuantityVector<InchesPhysicalUnit, double>;
+using Inches = AffineQuantity<InchesPhysicalUnit, double>;
 
 /// Feet.
-using Feet = PhysicalQuantityVector<FeetPhysicalUnit, double>;
+using Feet = AffineQuantity<FeetPhysicalUnit, double>;
 
 /// Pounds
-using Pounds = PhysicalQuantityVector<PoundsPhysicalUnit, double>;
+using Pounds = AffineQuantity<PoundsPhysicalUnit, double>;
 
 } // End of namespace units.

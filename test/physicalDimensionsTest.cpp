@@ -95,10 +95,10 @@ TEST(MultiplyPhysicalDimensions, StaticTests)
 {
     using MultiplyLengthAndTime = MultiplyPhysicalDimensions<Length, Time>;
 
-    static_assert(std::is_same<Length, typename MultiplyLengthAndTime::LhsPhysicalDimensions>::value,
-                  "LhsPhysicalDimensions is incorrectly assigned for @class MultiplyPhysicalDimensions.");
-    static_assert(std::is_same<Time, typename MultiplyLengthAndTime::RhsPhysicalDimensions>::value,
-                  "RhsPhysicalDimensions is incorrectly assigned for @class MultiplyPhysicalDimensions.");
+    static_assert(std::is_same<Length, typename MultiplyLengthAndTime::Lhs>::value,
+                  "Lhs is incorrectly assigned for @class MultiplyPhysicalDimensions.");
+    static_assert(std::is_same<Time, typename MultiplyLengthAndTime::Rhs>::value,
+                  "Rhs is incorrectly assigned for @class MultiplyPhysicalDimensions.");
     static_assert(std::is_same<MultiplyLengthAndTime, typename MultiplyLengthAndTime::SelfType>::value,
                   "SelfType is incorrectly assigned for @class MultiplyPhysicalDimensions.");
 }
@@ -157,10 +157,10 @@ TEST(DividePhysicalDimensions, StaticTests)
 {
     using DivideLengthAndTime = DividePhysicalDimensions<Length, Time>;
 
-    static_assert(std::is_same<Length, typename DivideLengthAndTime::LhsPhysicalDimensions>::value,
-                  "LhsPhysicalDimensions is incorrectly assigned for @class DividePhysicalDimensions.");
-    static_assert(std::is_same<Time, typename DivideLengthAndTime::RhsPhysicalDimensions>::value,
-                  "RhsPhysicalDimensions is incorrectly assigned for @class DividePhysicalDimensions.");
+    static_assert(std::is_same<Length, typename DivideLengthAndTime::Lhs>::value,
+                  "Lhs is incorrectly assigned for @class DividePhysicalDimensions.");
+    static_assert(std::is_same<Time, typename DivideLengthAndTime::Rhs>::value,
+                  "Rhs is incorrectly assigned for @class DividePhysicalDimensions.");
     static_assert(std::is_same<DivideLengthAndTime, typename DivideLengthAndTime::SelfType>::value,
                   "SelfType is incorrectly assigned for @class DividePhysicalDimensions.");
 }
