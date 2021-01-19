@@ -38,7 +38,7 @@ jobs:
         working-directory: ${{github.workspace}}/robotFarm/build
         run: cmake --build ${{github.workspace}}/robotFarm/build --config="Release"
 
-      -name: Install robotFarm
+      - name: Install robotFarm
         working-directory: ${{github.workspace}}/robotFarm/build
         run: cmake --install ${{github.workspace}}/robotFarm/build --config="Release"
 
