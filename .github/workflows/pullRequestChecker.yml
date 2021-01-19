@@ -7,7 +7,7 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  dependency-setup:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -38,10 +38,6 @@ jobs:
         working-directory: ${{github.workspace}}/robotFarm/build
         run: cmake --install ${{github.workspace}}/robotFarm/build --config Release
 
-  build:
-    runs-on: ubuntu-latest
-    needs: dependency-setup
-    steps:
       - name: Checkout units source tree
         uses: actions/checkout@v2
         with:
@@ -65,10 +61,6 @@ jobs:
         working-directory: ${{github.workspace}}/units/build
         run: cmake --build ${{github.workspace}}/units/build --config $BUILD_TYPE
 
-  unit-test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Run units' unit tests
         working-directory: ${{github.workspace}}/units/build
         run: ctest -C $BUILD_TYPE
