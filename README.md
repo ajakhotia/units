@@ -1,3 +1,5 @@
+![units workflow name](https://github.com/ajakhotia/units/workflows/Master%20Unit%20Tests/badge.svg)
+
 # Units
 A type-safe representation of physical units with zero run-time overhead. The type safety is achieved by statically keeping track of the physical dimensions and the scale for the each type. The dimensions and scales are tracked using std::ratio, hence, the system is capable of representing non-integer powers of physical dimensions. Multiplicative operators are designed to handle type conversions correctly. Additive operators are defined only for physical quantities that have matching physical dimensions. The scale conversions are handled implicitly by the system.
 
