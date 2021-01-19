@@ -1,4 +1,4 @@
-name: Pull Request Checker
+name: Pull Request Unit Test
 
 on: [ pull_request ]
 

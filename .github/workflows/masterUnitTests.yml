@@ -1,4 +1,4 @@
-name: Master Checker
+name: Master Unit Tests
 
 on:
   push:
