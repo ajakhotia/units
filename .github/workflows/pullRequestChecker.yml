@@ -1,0 +1,66 @@
+name: Pull Request Checker
+
+on: [ pull_request ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name : Checkout robotFarm source tree
+        uses: actions/checkout@v2
+        with:
+          repository: ajakhotia/robotFarm
+          path: ${{github.workspace}}/robotFarm
+
+      - name: Create robotFarm build tree
+        working-directory: ${{github.workspace}}/robotFarm
+        run: cmake -E make_directory ${{github.workspace}}/robotFarm/build
+
+      - name: Configure robotFarm
+        working-directory: ${{github.workspace}}/robotFarm/build
+        run: cmake
+              -S ${{github.workspace}}/robotFarm
+              -B ${{github.workspace}}/robotFarm/build
+              -DCMAKE_BUILD_TYPE:STRING="Release"
+              -DCMAKE_INSTALL_PREFIX:PATH=${{github.workspace}}/install
+              -DROBOT_FARM_BUILD_GOOGLE_TEST:BOOL=ON
+
+      - name: Build robotFarm
+        working-directory: ${{github.workspace}}/robotFarm/build
+        run: cmake --build ${{github.workspace}}/robotFarm/build --config Release
+
+      - name: Install robotFarm
+        working-directory: ${{github.workspace}}/robotFarm/build
+        run: cmake --install ${{github.workspace}}/robotFarm/build --config Release
+
+      - name: Checkout units source tree
+        uses: actions/checkout@v2
+        with:
+          repository: ${{github.repository}}
+          path: ${{github.workspace}}/units
+
+      - name: Create units build tree
+        working-directory: ${{github.workspace}}/units
+        run: cmake -E make_directory ${{github.workspace}}/units/build
+
+      - name: Configure units
+        working-directory: ${{github.workspace}}/units/build
+        run: cmake
+            -S ${{github.workspace}}/units
+            -B ${{github.workspace}}/units/build
+            -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+            -DCMAKE_PREFIX_PATH:PATH=${{github.workspace}}/install
+            -DCMAKE_INSTALL_PREFIX:PATH=${{github.workspace}}/install
+
+      - name: Build units
+        working-directory: ${{github.workspace}}/units/build
+        run: cmake --build ${{github.workspace}}/units/build --config $BUILD_TYPE
+
+      - name: Run units' unit tests
+        working-directory: ${{github.workspace}}/units/build
+        run: ctest -C $BUILD_TYPE
