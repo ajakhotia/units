@@ -26,7 +26,10 @@ target_include_directories(units INTERFACE
 		$<INSTALL_INTERFACE:include>)
 
 target_compile_features(units INTERFACE cxx_std_14)
-target_compile_options(units INTERFACE -Wall -Wextra -pedantic)
+
+target_compile_options(units INTERFACE
+		$<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+		$<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror>)
 
 
 #[[ Build unit tests if requested. ]]
