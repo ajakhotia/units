@@ -25,7 +25,7 @@ target_include_directories(units INTERFACE
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		$<INSTALL_INTERFACE:include>)
 
-target_compile_features(units INTERFACE cxx_std_11)
+target_compile_features(units INTERFACE cxx_std_14)
 target_compile_options(units INTERFACE -Wall -Wextra -pedantic)
 
 
