@@ -38,6 +38,16 @@ if (BUILD_TESTING)
 endif (BUILD_TESTING)
 
 
+find_program(DOCKER_EXECUTABLE docker)
+
+if(DOCKER_EXECUTABLE)
+	message(STATUS "Found docker executable at ${DOCKER_EXECUTABLE}. Adding targets for docker builds.")
+	add_subdirectory(docker)
+else()
+	message("Could not find docker executable. Skipping setup of targets for docker builds.")
+endif()
+
+
 install(DIRECTORY include/units
 		DESTINATION include
 		FILES_MATCHING PATTERN "*.h")
