@@ -35,7 +35,7 @@ target_compile_options(units INTERFACE
 #[[ Build unit tests if requested. ]]
 if (BUILD_TESTING)
 	add_subdirectory(test)
-endif (BUILD_TESTING)
+endif()
 
 
 find_program(DOCKER_EXECUTABLE docker)
