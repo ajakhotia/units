@@ -1,0 +1,7 @@
+*build*
+.dockerignore
+.git
+.github
+.gitignore
+.idea
+docker
