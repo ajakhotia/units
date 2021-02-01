@@ -23,7 +23,7 @@
  */
 #pragma once
 
-#include "physicalUnits.h"
+#include "physicalUnits.hpp"
 #include <ostream>
 
 namespace units

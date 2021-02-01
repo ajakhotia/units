@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <units/si.h>
-#include <units/imperial.h>
+#include <units/si.hpp>
+#include <units/imperial.hpp>
 #include <gtest/gtest.h>
 
 namespace units

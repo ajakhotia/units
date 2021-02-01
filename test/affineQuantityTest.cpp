@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#include <units/si.h>
-#include <units/imperial.h>
+#include <units/si.hpp>
+#include <units/imperial.hpp>
 #include <gtest/gtest.h>
 
 namespace units

@@ -44,7 +44,7 @@ if(DOCKER_EXECUTABLE)
 	message(STATUS "Found docker executable at ${DOCKER_EXECUTABLE}. Adding targets for docker builds.")
 	add_subdirectory(docker)
 else()
-	message("Could not find docker executable. Skipping setup of targets for docker builds.")
+	message(STATUS "Docker - not found. Skipping targets for docker builds.")
 endif()
 
 
