@@ -23,7 +23,7 @@
  */
 #pragma once
 
-#include "physicalDimensions.h"
+#include "physicalDimensions.hpp"
 
 namespace units
 {

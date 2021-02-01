@@ -20,24 +20,28 @@ RUN apt-get install -y libstdc++6 --no-install-recommends 2>&1 | tee -a /buildLo
 FROM units-base AS units-build-base
 
 RUN apt-get install -y --no-install-recommends  \
+        ca-certificates                         \
         cmake                                   \
         curl                                    \
         g++                                     \
+        ninja-build                             \
         2>&1 | tee -a /buildLog.txt
 
 
 FROM units-build-base AS units-external-build
 
+WORKDIR /tmp
 RUN curl -L https://github.com/ajakhotia/robotFarm/archive/v0.1.0.tar.gz -o /tmp/robotFarm.tar.gz &&    \
-    tar -xf /tmp/robotFarm.tar.gz -C /tmp &&                                                            \
-    mv /tmp/robotFarm-0.1.0 /tmp/robotFarm-src &&                                                       \
-    rm /tmp/robotFarm.tar.gz
+    cmake -E tar -x /tmp/robotFarm.tar.gz &&                                                            \
+    cmake -E rename /tmp/robotFarm-0.1.0 /tmp/robotFarm-src &&                                          \
+    cmake -E remove /tmp/robotFarm.tar.gz
 
+RUN ls /tmp
 RUN cmake -E make_directory /tmp/robotFarm-build
 
-RUN cmake -S /tmp/robotFarm-src -B /tmp/robotFarm-build     \
-    -DCMAKE_BUILD_TYPE:STRING="Release"                     \
-    -DCMAKE_INSTALL_PREFIX:PATH=/usr                        \
+RUN cmake -G Ninja -S /tmp/robotFarm-src -B /tmp/robotFarm-build    \
+    -DCMAKE_BUILD_TYPE:STRING="Release"                             \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr                                \
     -DROBOT_FARM_BUILD_GOOGLE_TEST:BOOL=ON
 
 RUN cmake --build /tmp/robotFarm-build --config Release -- -j `nproc`
@@ -51,9 +55,9 @@ COPY . /tmp/units-src
 
 
 RUN cmake -E make_directory /tmp/units-build
-RUN cmake -S /tmp/units-src -B /tmp/units-build     \
-    -DCMAKE_BUILD_TYPE:STRING="Release"             \
-    -DCMAKE_INSTALL_PREFIX:PATH=/usr                \
+RUN cmake -G Ninja -S /tmp/units-src -B /tmp/units-build    \
+    -DCMAKE_BUILD_TYPE:STRING="Release"                     \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr                        \
     -DBUILD_TESTING:BOOL=ON
 
 RUN cmake --build /tmp/units-build --config Release
@@ -84,4 +88,4 @@ endif()\n'                                                      \
     >> /tmp/unitsImportTest-src/CMakeLists.txt
 
 RUN cmake -E make_directory /tmp/unitsImportTest-build
-RUN cmake -S /tmp/unitsImportTest-src -B /tmp/unitsImportTest-build
+RUN cmake -G Ninja -S /tmp/unitsImportTest-src -B /tmp/unitsImportTest-build

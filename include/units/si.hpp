@@ -23,7 +23,7 @@
  */
 #pragma once
 
-#include "affineQuantity.h"
+#include "affineQuantity.hpp"
 
 namespace units
 {
