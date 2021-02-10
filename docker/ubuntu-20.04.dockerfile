@@ -54,16 +54,10 @@ RUN cmake --install /tmp/units-build --config Release
 
 
 #
-# Container with units package install to /usr.
-#
-FROM units-ubuntu-20_04-base AS units-ubuntu-20_04-deploy
-COPY --from=units-ubuntu-20_04-build /usr /usr
-
-
-#
 # Disposable container to test findability of installed units package.
 #
-FROM units-ubuntu-20_04-deploy AS units-ubuntu-20_04-deploy-tester
+FROM units-ubuntu-20_04-base AS units-ubuntu-20_04-deploy-tester
+COPY --from=units-ubuntu-20_04-build /usr /usr
 
 WORKDIR /tmp
 RUN curl -L https://github.com/ajakhotia/importTester/archive/main.zip -o /tmp/importTester.zip &&  \
@@ -79,3 +73,10 @@ ENTRYPOINT ["cmake",                                    \
             "-S", "/tmp/importTester-src",              \
             "-B", "/tmp/importTester-build",            \
             "-DIMPORT_TESTER_FIND_units:BOOL=ON"]
+
+
+#
+# Container with units package install to /usr.
+#
+FROM units-ubuntu-20_04-base AS units-ubuntu-20_04-deploy
+COPY --from=units-ubuntu-20_04-build /usr /usr
