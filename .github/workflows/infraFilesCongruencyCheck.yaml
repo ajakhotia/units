@@ -1,0 +1,57 @@
+name: infraFilesCongruencyCheck
+
+on:
+  schedule:
+    - cron: '0 0,12 * * *'
+  push:
+    branches:
+      - main
+
+jobs:
+  congruency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: clientRepository
+
+      - uses: actions/checkout@v4
+        with:
+          repository: naksh-io/infraCommons
+          path: templateRepository
+          ref: main
+
+      - name: "Run congruency check"
+        run: python3 templateRepository/ci/congruency_test.py -t templateRepository -c clientRepository --apply-diffs
+
+      - name: "Check for changes"
+        id: check_for_changes
+        run: |
+          cd clientRepository
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: "Create branch and pull request"
+        if: steps.check_for_changes.outputs.has_changes == 'true'
+        run: |
+          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+          cd clientRepository
+          branch_name="automated-update-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b $branch_name
+
+          # Commit and push changes
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Automated changes"
+          git push origin $branch_name
+
+          gh pr create \
+          --base main \
+          --head $branch_name \
+          --title "Automated Update" \
+          --body "This PR was automatically created by infraFilesCongruencyCheck GitHub Action to ensure that
+                  core infra files remain synchronized with naksh-io/infraCommons" \
