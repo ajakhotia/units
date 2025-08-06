@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.10.0)
 #[[ Set the name of the project and provide language specification. ]]
 project(units VERSION 0.2.0.1 LANGUAGES C CXX)
 
+include(cmake/utilities/exportedTargets.cmake)
+
 #[[ Find GTest as a required dependency if the user as requested building of unit tests. ]]
 if(BUILD_TESTING)
 	find_package(GTest REQUIRED)
@@ -17,19 +19,47 @@ if((TARGET GTest::GTest) AND (TARGET GTest::Main))
     include(CTest)
 endif()
 
+
 #[[ Create an INTERFACE target as this library is header-only. ]]
-add_library(units INTERFACE)
-add_library(Units::units ALIAS units)
+add_exported_library(
+    TARGET
+      units
 
-target_include_directories(units INTERFACE
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-		$<INSTALL_INTERFACE:include>)
+    TYPE
+      INTERFACE
 
-target_compile_features(units INTERFACE cxx_std_14)
+    NAMESPACE
+      Units::
 
-target_compile_options(units INTERFACE
-		$<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-		$<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror>)
+    EXPORT
+      unitsTargets
+
+    SOURCES
+      ""
+
+    HEADERS
+      INTERFACE include/units/affineQuantity.hpp
+      INTERFACE include/units/imperial.hpp
+      INTERFACE include/units/physicalDimensions.hpp
+      INTERFACE include/units/physicalUnits.hpp
+      INTERFACE include/units/si.hpp
+
+    INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/include
+
+    LINK_LIBRARIES
+      ""
+
+    COMPILE_FEATURES
+      INTERFACE cxx_std_14
+
+    COMPILE_OPTIONS
+      INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+      INTERFACE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror>
+
+    COMPILE_DEFINITIONS
+      ""
+)
 
 
 #[[ Build unit tests if requested. ]]
@@ -46,17 +76,6 @@ if(DOCKER_EXECUTABLE)
 else()
 	message(STATUS "Docker - not found. Skipping targets for docker builds.")
 endif()
-
-
-install(DIRECTORY include/units
-		DESTINATION include
-		FILES_MATCHING PATTERN "*.h")
-
-install(TARGETS units EXPORT unitsTargets COMPONENT units
-		RUNTIME DESTINATION bin
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib
-		INCLUDES DESTINATION include)
 
 
 #[[ Include cmake-default tools to help create export files. ]]
