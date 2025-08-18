@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          repository: naksh-io/infraCommons
+          repository: ajakhotia/infraCommons
           path: templateRepository
           ref: main
 
@@ -54,4 +54,4 @@ jobs:
           --head $branch_name \
           --title "Automated Update" \
           --body "This PR was automatically created by infraFilesCongruencyCheck GitHub Action to ensure that
-                  core infra files remain synchronized with naksh-io/infraCommons" \
+                  core infra files remain synchronized with ajakhotia/infraCommons" \
