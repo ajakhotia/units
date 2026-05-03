@@ -2,6 +2,9 @@
 
 # 📐 Units
 
+> 🛰️ In 1999, the Mars Climate Orbiter crashed because someone mixed metres and feet.
+> `units` would have converted it for you.
+
 `units` lets you attach physical units to numbers in C++ and have the compiler stop you from
 mixing them up:
 
