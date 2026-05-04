@@ -248,6 +248,8 @@ jobs:
           image-name: ${{ steps.image-name-deploy.outputs.name }}:${{ steps.docker-metadata.outputs.version }}
           library-names: units
           prefix-path: /opt/units
+          pre-check: |
+            export CMAKE_GENERATOR=Ninja
 
 
   aggregate-find-package:
