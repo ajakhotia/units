@@ -1,22 +1,33 @@
-cmake_minimum_required(VERSION 3.10.0)
+cmake_minimum_required(VERSION 3.27)
 
-#[[ Set the name of the project and provide language specification. ]]
 project(units VERSION 0.2.0.1 LANGUAGES C CXX)
 
-include(cmake/utilities/exportedTargets.cmake)
 
-#[[ Find GTest as a required dependency if the user as requested building of unit tests. ]]
+#[[ Setup unit testing framework. ]]
 if(BUILD_TESTING)
-	find_package(GTest REQUIRED)
+    find_package(GTest REQUIRED)
 else()
-	find_package(GTest)
+    find_package(GTest)
 endif()
 
-#[[ Enable testing only if gtest target is available. Include(CTest) should setup the build correctly and
-    set BUILD_TESTING flag to true. BUILD_TESTING should be the only flag that should be used to figure out if
-    or not to add tests sub-directory. ]]
 if((TARGET GTest::GTest) AND (TARGET GTest::Main))
     include(CTest)
+endif()
+
+
+#[[ Setup project level tools and external dependencies if and only if this project
+    is the top-level project. If this project has been included with-in another
+    project as a submodule, then the onus of setting up these requirement falls on that
+    top-level project. This prevents this project from overreaching when it is used as a submodule
+    in another project. ]]
+if(PROJECT_IS_TOP_LEVEL)
+    include(external/infraCommons/cmake/utilities/clangFormat.cmake)
+    include(external/infraCommons/cmake/utilities/exportedTargets.cmake)
+    include(external/infraCommons/cmake/utilities/requireArguments.cmake)
+
+    add_clang_format(TARGET unitsClangFormat VERSION 19)
+
+    add_subdirectory(docker)
 endif()
 
 
@@ -63,18 +74,8 @@ add_exported_library(
 
 
 #[[ Build unit tests if requested. ]]
-if (BUILD_TESTING)
-	add_subdirectory(test)
-endif()
-
-
-find_program(DOCKER_EXECUTABLE docker)
-
-if(DOCKER_EXECUTABLE)
-	message(STATUS "Found docker executable at ${DOCKER_EXECUTABLE}. Adding targets for docker builds.")
-	add_subdirectory(docker)
-else()
-	message(STATUS "Docker - not found. Skipping targets for docker builds.")
+if(BUILD_TESTING)
+    add_subdirectory(test)
 endif()
 
 
@@ -84,24 +85,24 @@ include(CMakePackageConfigHelpers)
 #[[ Install ${CMAKE_INSTALL_PREFIX}/lib/cmake/units/unitsTargets.cmake for other projects to include the
     installation tree. ]]
 install(EXPORT unitsTargets NAMESPACE Units::
-		FILE unitsTargets.cmake
-		DESTINATION lib/cmake/units)
+        FILE unitsTargets.cmake
+        DESTINATION lib/cmake/units)
 
 #[[ Generate a configuration and install it. ]]
 write_basic_package_version_file(
-		${CMAKE_CURRENT_BINARY_DIR}/cmake/unitsConfigVersion.cmake
-		COMPATIBILITY SameMajorVersion)
+        ${CMAKE_CURRENT_BINARY_DIR}/cmake/unitsConfigVersion.cmake
+        COMPATIBILITY SameMajorVersion)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/unitsConfigVersion.cmake
-		DESTINATION lib/cmake/units)
+        DESTINATION lib/cmake/units)
 
 #[[ Configure and install unitsConfig.cmake.in to enable other projects find units from
     the install tree. Even though the function configure_package_config_file takes the INSTALL_DESTINATION, it
     doesn't actually create a installation step for "make install". So, to install the generated config file, we
     are required to manually create a install step. ]]
 configure_package_config_file(
-		cmake/unitsConfig.cmake.in cmake/unitsConfig.cmake
-		INSTALL_DESTINATION lib/cmake/units)
+        cmake/unitsConfig.cmake.in cmake/unitsConfig.cmake
+        INSTALL_DESTINATION lib/cmake/units)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/unitsConfig.cmake
-		DESTINATION lib/cmake/units)
+        DESTINATION lib/cmake/units)

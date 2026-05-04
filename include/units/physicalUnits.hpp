@@ -29,14 +29,18 @@ namespace units
 {
 
 
-/// @brief  Template class to represent a physical unit. A physical unit consists of physical dimensions and
-///         a scale factor. In this implementation, we use the S.I. standard as the basis for determining scale.
+/// @brief  Template class to represent a physical unit. A physical unit consists of physical
+/// dimensions and
+///         a scale factor. In this implementation, we use the S.I. standard as the basis for
+///         determining scale.
 ///
-///         EG: For the physical unit representing a meter, the physical dimension is of type Length and scale is
+///         EG: For the physical unit representing a meter, the physical dimension is of type Length
+///         and scale is
 ///             of type std::ratio<1, 1>.
 ///
-///             For the physical unit representing an inch, the physical dimension is of type Length and scale is
-///             of type std::ratio<254, 10000>. Meter is the SI unit for Length and 1 inch is 0.0254 meters.
+///             For the physical unit representing an inch, the physical dimension is of type Length
+///             and scale is of type std::ratio<254, 10000>. Meter is the SI unit for Length and 1
+///             inch is 0.0254 meters.
 ///
 /// @tparam	PhysicalDimensions_     The physical dimensions of the unit of measurement.
 ///
@@ -46,25 +50,25 @@ template<typename PhysicalDimensions_, typename Scale_>
 class PhysicalUnits
 {
 public:
-    using PhysicalDimensions = PhysicalDimensions_;
-    using Scale = Scale_;
-    using SelfType = PhysicalUnits<PhysicalDimensions, Scale>;
+  using PhysicalDimensions = PhysicalDimensions_;
+  using Scale = Scale_;
+  using SelfType = PhysicalUnits<PhysicalDimensions, Scale>;
 
-    PhysicalUnits() = delete;
+  PhysicalUnits() = delete;
 
-    PhysicalUnits(const PhysicalUnits &) = delete;
+  PhysicalUnits(const PhysicalUnits&) = delete;
 
-    PhysicalUnits(PhysicalUnits &&) = delete;
+  PhysicalUnits(PhysicalUnits&&) = delete;
 
-    ~PhysicalUnits() = delete;
+  ~PhysicalUnits() = delete;
 
-    SelfType &operator=(const SelfType &) = delete;
+  SelfType& operator=(const SelfType&) = delete;
 
-    SelfType &operator=(SelfType &&) = delete;
+  SelfType& operator=(SelfType&&) = delete;
 };
 
-
-/// @brief  Statically computes a std::ratio and the corresponding float which converts a value with RHS physical units
+/// @brief  Statically computes a std::ratio and the corresponding float which converts a value with
+/// RHS physical units
 ///         to the appropriate value in LHS' scale.
 ///
 /// @tparam	Lhs_	LHS / Destination physical units type.
@@ -78,91 +82,95 @@ template<typename Lhs_, typename Rhs_, typename FloatType_>
 class PhysicalUnitsScale
 {
 public:
-    using Lhs = Lhs_;
-    using Rhs = Rhs_;
-    using FloatType = FloatType_;
-    using SelfType = PhysicalUnitsScale<Lhs, Rhs, FloatType>;
+  using Lhs = Lhs_;
+  using Rhs = Rhs_;
+  using FloatType = FloatType_;
+  using SelfType = PhysicalUnitsScale<Lhs, Rhs, FloatType>;
 
-    // Assert same physical dimensions for operand physical units.
-    static_assert(
-        std::is_same<typename Lhs::PhysicalDimensions, typename Rhs::PhysicalDimensions>::value,
-        "Requested scale computation for physical units of different physical dimensions.");
+  // Assert same physical dimensions for operand physical units.
+  static_assert(
+      std::is_same<typename Lhs::PhysicalDimensions, typename Rhs::PhysicalDimensions>::value,
+      "Requested scale computation for physical units of different physical dimensions.");
 
-    using Result = std::ratio_divide<typename Rhs::Scale, typename Lhs::Scale>;
+  using Result = std::ratio_divide<typename Rhs::Scale, typename Lhs::Scale>;
 
-    static constexpr const FloatType kScale{FloatType(Result::num) / FloatType(Result::den)};
+  static constexpr const FloatType kScale{ FloatType(Result::num) / FloatType(Result::den) };
 
-    PhysicalUnitsScale() = delete;
+  PhysicalUnitsScale() = delete;
 
-    PhysicalUnitsScale(const PhysicalUnitsScale &) = delete;
+  PhysicalUnitsScale(const PhysicalUnitsScale&) = delete;
 
-    PhysicalUnitsScale(PhysicalUnitsScale &&) = delete;
+  PhysicalUnitsScale(PhysicalUnitsScale&&) = delete;
 
-    ~PhysicalUnitsScale() = delete;
+  ~PhysicalUnitsScale() = delete;
 
-    SelfType &operator=(const SelfType &) = delete;
+  SelfType& operator=(const SelfType&) = delete;
 
-    SelfType &operator=(SelfType &&) = delete;
+  SelfType& operator=(SelfType&&) = delete;
 };
 
-
-/// @brief  Statically computes the physical units of the result of the product of operand physical units.
+/// @brief  Statically computes the physical units of the result of the product of operand physical
+/// units.
 /// @tparam Lhs_
 /// @tparam Rhs_
 template<typename Lhs_, typename Rhs_>
 class MultiplyPhysicalUnits
 {
 public:
-    using Lhs = Lhs_;
-    using Rhs = Rhs_;
-    using SelfType = MultiplyPhysicalUnits<Lhs, Rhs>;
+  using Lhs = Lhs_;
+  using Rhs = Rhs_;
+  using SelfType = MultiplyPhysicalUnits<Lhs, Rhs>;
 
-    /// Resulting physical units that is a multiplication of LHS and RHS.
-    using Result = PhysicalUnits<
-        typename MultiplyPhysicalDimensions<typename Lhs::PhysicalDimensions, typename Rhs::PhysicalDimensions>::Result,
-        typename std::ratio_multiply<typename Lhs::Scale, typename Rhs::Scale>>;
+  /// Resulting physical units that is a multiplication of LHS and RHS.
+  using Result = PhysicalUnits<
+      typename MultiplyPhysicalDimensions<
+          typename Lhs::PhysicalDimensions,
+          typename Rhs::PhysicalDimensions>::Result,
+      typename std::ratio_multiply<typename Lhs::Scale, typename Rhs::Scale>>;
 
-    MultiplyPhysicalUnits() = delete;
+  MultiplyPhysicalUnits() = delete;
 
-    MultiplyPhysicalUnits(const MultiplyPhysicalUnits &) = delete;
+  MultiplyPhysicalUnits(const MultiplyPhysicalUnits&) = delete;
 
-    MultiplyPhysicalUnits(MultiplyPhysicalUnits &&) = delete;
+  MultiplyPhysicalUnits(MultiplyPhysicalUnits&&) = delete;
 
-    ~MultiplyPhysicalUnits() = delete;
+  ~MultiplyPhysicalUnits() = delete;
 
-    SelfType &operator=(const SelfType &) = delete;
+  SelfType& operator=(const SelfType&) = delete;
 
-    SelfType &operator=(SelfType &&) = delete;
+  SelfType& operator=(SelfType&&) = delete;
 };
 
-
-/// @brief  Statically computes the physical units of the result of the division of operand physical units.
+/// @brief  Statically computes the physical units of the result of the division of operand physical
+/// units.
 /// @tparam Lhs_
 /// @tparam Rhs_
 template<typename Lhs_, typename Rhs_>
 class DividePhysicalUnits
 {
 public:
-    using Lhs = Lhs_;
-    using Rhs = Rhs_;
-    using SelfType = DividePhysicalUnits<Lhs, Rhs>;
+  using Lhs = Lhs_;
+  using Rhs = Rhs_;
+  using SelfType = DividePhysicalUnits<Lhs, Rhs>;
 
-    /// Resulting physical units that is a multiplication of LHS and RHS.
-    using Result = PhysicalUnits<
-        typename DividePhysicalDimensions<typename Lhs::PhysicalDimensions, typename Rhs::PhysicalDimensions>::Result,
-        typename std::ratio_divide<typename Lhs::Scale, typename Rhs::Scale>>;
+  /// Resulting physical units that is a multiplication of LHS and RHS.
+  using Result = PhysicalUnits<
+      typename DividePhysicalDimensions<
+          typename Lhs::PhysicalDimensions,
+          typename Rhs::PhysicalDimensions>::Result,
+      typename std::ratio_divide<typename Lhs::Scale, typename Rhs::Scale>>;
 
-    DividePhysicalUnits() = delete;
+  DividePhysicalUnits() = delete;
 
-    DividePhysicalUnits(const DividePhysicalUnits &) = delete;
+  DividePhysicalUnits(const DividePhysicalUnits&) = delete;
 
-    DividePhysicalUnits(DividePhysicalUnits &&) = delete;
+  DividePhysicalUnits(DividePhysicalUnits&&) = delete;
 
-    ~DividePhysicalUnits() = delete;
+  ~DividePhysicalUnits() = delete;
 
-    SelfType &operator=(const SelfType &) = delete;
+  SelfType& operator=(const SelfType&) = delete;
 
-    SelfType &operator=(SelfType &&) = delete;
+  SelfType& operator=(SelfType&&) = delete;
 };
 
 

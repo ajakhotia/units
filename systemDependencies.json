@@ -1,0 +1,30 @@
+{
+  "supportedOS": [
+    "ubuntu:22.04",
+    "ubuntu:24.04"
+  ],
+  "groupTags": [
+    "all",
+    "skip"
+  ],
+  "groups": [
+    {
+      "group": "Basics",
+      "ubuntu:22.04": "ca-certificates curl git gnupg ninja-build software-properties-common",
+      "ubuntu:24.04": "ca-certificates curl git gnupg ninja-build software-properties-common",
+      "tag": "all"
+    },
+    {
+      "group": "Compilers",
+      "ubuntu:22.04": "clang-22 g++-15 gcc-15 libomp-22-dev",
+      "ubuntu:24.04": "clang-22 g++-15 gcc-15 libomp-22-dev",
+      "tag": "all"
+    },
+    {
+      "group": "Testing",
+      "ubuntu:22.04": "libgmock-dev libgtest-dev",
+      "ubuntu:24.04": "libgmock-dev libgtest-dev",
+      "tag": "all"
+    }
+  ]
+}

@@ -1,2 +1,10 @@
-build*
+# Build system related.
+*build*
+CMakeUserPresets.json
+
+# IDE related
 .idea
+
+# AI tools
+CLAUDE.md
+.claude
