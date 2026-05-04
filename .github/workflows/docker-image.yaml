@@ -250,8 +250,8 @@ jobs:
           prefix-path: /opt/units
           pre-check: |
             export CMAKE_GENERATOR=Ninja
-            export CMAKE_C_COMPILER=/usr/bin/gcc-15
-            export CMAKE_CXX_COMPILER=/usr/bin/g++-15
+            export CC=/usr/bin/gcc-15
+            export CXX=/usr/bin/g++-15
 
 
   aggregate-find-package:
