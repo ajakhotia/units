@@ -22,9 +22,20 @@ RUN printf '%s\n'                                                               
 
 RUN printf '%s\n'                                                                                  \
     'Acquire::http::Pipeline-Depth 0;'                                                             \
+    'Acquire::https::Pipeline-Depth 0;'                                                            \
     'Acquire::http::No-Cache true;'                                                                \
+    'Acquire::https::No-Cache true;'                                                               \
     'Acquire::BrokenProxy    true;'                                                                \
     >> /etc/apt/apt.conf.d/90fix-hashsum-mismatch
+
+# Make apt resilient to flaky upstreams (e.g., Launchpad PPA hosting under stress):
+# 5 retries with short per-request timeouts so each failed attempt fails fast and
+# we get more shots at reaching a healthy backend behind the load balancer.
+RUN printf '%s\n'                                                                                  \
+    'Acquire::Retries "5";'                                                                        \
+    'Acquire::http::Timeout "30";'                                                                 \
+    'Acquire::https::Timeout "30";'                                                                \
+    > /etc/apt/apt.conf.d/91retry-and-timeouts
 
 RUN --mount=type=cache,target=/var/cache/apt,id=${APT_VAR_CACHE_ID},sharing=locked                 \
     --mount=type=cache,target=/var/lib/apt/lists,id=${APT_LIST_CACHE_ID},sharing=locked            \
