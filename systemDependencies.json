@@ -10,8 +10,8 @@
   "groups": [
     {
       "group": "Basics",
-      "ubuntu:22.04": "ca-certificates curl git gnupg ninja-build software-properties-common",
-      "ubuntu:24.04": "ca-certificates curl git gnupg ninja-build software-properties-common",
+      "ubuntu:22.04": "ca-certificates cmake curl git gnupg kitware-archive-keyring ninja-build software-properties-common",
+      "ubuntu:24.04": "ca-certificates cmake curl git gnupg kitware-archive-keyring ninja-build software-properties-common",
       "tag": "all"
     },
     {
