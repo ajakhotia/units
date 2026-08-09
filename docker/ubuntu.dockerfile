@@ -45,8 +45,8 @@ RUN --mount=type=cache,target=/var/cache/apt,id=${APT_VAR_CACHE_ID},sharing=lock
     apt-get autoclean -y --no-install-recommends
 
 # Bootstrap: hardcoded so that systemDependencies.json edits don't invalidate the slow apt-source
-# registration + Kitware CMake fetch below. jq is needed for extractDependencies.sh; the rest are
-# the minimum set the apt-source scripts and installCMake.sh themselves require.
+# registration below. jq is needed by extractDependencies.sh; the rest are the minimum set
+# addAptSources.sh itself requires.
 RUN --mount=type=cache,target=/var/cache/apt,id=${APT_VAR_CACHE_ID},sharing=locked                 \
     --mount=type=cache,target=/var/lib/apt/lists,id=${APT_LIST_CACHE_ID},sharing=locked            \
     apt-get update &&                                                                              \
@@ -55,18 +55,16 @@ RUN --mount=type=cache,target=/var/cache/apt,id=${APT_VAR_CACHE_ID},sharing=lock
 
 RUN --mount=type=cache,target=/var/cache/apt,id=${APT_VAR_CACHE_ID},sharing=locked                 \
     --mount=type=cache,target=/var/lib/apt/lists,id=${APT_LIST_CACHE_ID},sharing=locked            \
-    --mount=type=bind,src=external/infraCommons/tools,dst=/tmp/tools                               \
-    bash /tmp/tools/apt/addGNUSources.sh    -y &&                                                  \
-    bash /tmp/tools/apt/addLLVMSources.sh   -y &&                                                  \
-    bash /tmp/tools/installCMake.sh
+    --mount=type=bind,src=external/infraCommons/tools/apt/addAptSources.sh,dst=/tmp/addAptSources.sh \
+    bash /tmp/addAptSources.sh -y gnu llvm kitware
 
 RUN --mount=type=cache,target=/var/cache/apt,id=${APT_VAR_CACHE_ID},sharing=locked                 \
     --mount=type=cache,target=/var/lib/apt/lists,id=${APT_LIST_CACHE_ID},sharing=locked            \
-    --mount=type=bind,src=external/infraCommons/tools,dst=/tmp/tools                               \
+    --mount=type=bind,src=external/infraCommons/tools/extractDependencies.sh,dst=/tmp/extractDependencies.sh \
     --mount=type=bind,src=systemDependencies.json,dst=/tmp/systemDependencies.json                 \
     apt-get update &&                                                                              \
     apt-get install -y --no-install-recommends                                                     \
-      $(sh /tmp/tools/extractDependencies.sh "Basics Compilers" /tmp/systemDependencies.json)
+      $(sh /tmp/extractDependencies.sh "Basics Compilers" /tmp/systemDependencies.json)
 
 
 FROM base AS dev-base
@@ -75,11 +73,11 @@ ENV TOOLCHAIN=${TOOLCHAIN}
 
 RUN --mount=type=cache,target=/var/cache/apt,id=${APT_VAR_CACHE_ID},sharing=locked                 \
     --mount=type=cache,target=/var/lib/apt/lists,id=${APT_LIST_CACHE_ID},sharing=locked            \
-    --mount=type=bind,src=external/infraCommons/tools,dst=/tmp/tools                               \
+    --mount=type=bind,src=external/infraCommons/tools/extractDependencies.sh,dst=/tmp/extractDependencies.sh \
     --mount=type=bind,src=systemDependencies.json,dst=/tmp/systemDependencies.json                 \
     apt-get update &&                                                                              \
     apt-get install -y --no-install-recommends                                                     \
-      $(sh /tmp/tools/extractDependencies.sh "Testing" /tmp/systemDependencies.json)
+      $(sh /tmp/extractDependencies.sh "Testing" /tmp/systemDependencies.json)
 
 
 FROM dev-base AS build
