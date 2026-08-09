@@ -92,8 +92,9 @@ There are two supported integration paths.
 Build and install once on your system:
 
 ```bash
-git clone --recurse-submodules https://github.com/ajakhotia/units.git
+git clone https://github.com/ajakhotia/units.git
 cd units
+git submodule update --init
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build   build
 cmake --install build
@@ -115,12 +116,14 @@ when configuring your project.
 ### 🧩 Option 2: vendor as a git submodule
 
 Add both `units` and `infraCommons` as submodules of your project. `infraCommons` is required
-because `units` uses the `add_exported_library` helper from it to declare its target.
+because `units` uses the `add_exported_library` helper from it to declare its target. Submodules
+are composed flat: the top-level project owns exactly one copy of each, and initialization is
+never recursive, so a submodule's own submodules stay dormant.
 
 ```bash
 git submodule add https://github.com/ajakhotia/infraCommons.git external/infraCommons
 git submodule add https://github.com/ajakhotia/units.git        external/units
-git submodule update --init --recursive
+git submodule update --init
 ```
 
 In your top-level `CMakeLists.txt`, include `exportedTargets.cmake` under a
